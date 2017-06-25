@@ -13,7 +13,6 @@
     "vuex": "^2.3.1",
     "vue-router": "^2.5.3",
     "vue-resource": "^1.2.1",
-    "vue-material":"^0.7.1",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
