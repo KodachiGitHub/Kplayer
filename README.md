@@ -1,6 +1,6 @@
 # Kplayer
 
-> hello world
+> a music player demo based on vue.js
 
 ## Build Setup
 
@@ -15,4 +15,4 @@ npm run dev
 npm run build
 ```
 
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+
