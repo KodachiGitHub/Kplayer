@@ -1,0 +1,132 @@
+@import url(http://at.alicdn.com/t/font_0qrfeyhebdwjyvi.css);
+*{
+    box-sizing: border-box;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left: 0;
+    background-color: #3c3f41;
+    font-family: '微软雅黑' , sans-serif;
+}
+a{
+    text-decoration: none;
+}
+.content {
+    max-width: 640px;
+    margin: 0 auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    background-color: #3c3f41;
+}
+
+.flex,.flex-column{
+    display: flex;
+    align-items:center;
+}
+.flex-column{
+    flex-direction: column;
+}
+.flex-1{
+    flex:1;
+}
+
+html {
+    font-size: 20px;
+}
+@media only screen and (min-width: 400px) {
+    html {
+        font-size: 21.33333333px !important;
+    }
+}
+@media only screen and (min-width: 414px) {
+    html {
+        font-size: 22.08px !important;
+    }
+}
+@media only screen and (min-width: 480px) {
+    html {
+        font-size: 25.6px !important;
+    }
+}
+
+.iconfont{
+    margin: 0 .2rem;
+    color:#CC3B23;
+    font-size: 1.1rem;
+    line-height: 2rem;
+}
+
+.label{
+    margin: .8rem 0 .3rem 0;
+    padding-left: .5rem;
+    border-left:.1rem solid #C10D0C;
+    display: inline-block;
+    font-size:.75rem;
+}
+
+.row{
+    display: flex;
+    overflow: hidden;
+    margin-left: -2%;
+    flex-wrap: wrap;
+}
+.col-33{
+    width: 31.333333333333332%;
+    margin-left: 2%;
+}
+
+.loading-box{
+    width: 100%;
+    position: absolute;
+    top:0;
+    bottom: 0;
+}
+.loading-box .circular {
+    width: 42px;
+    height: 42px;
+    margin-left: -21px;
+    margin-top: -81px;
+    animation: loading-rotate 2s linear infinite;
+    position: absolute;
+    top:50%;
+    left:50%;
+}
+.loading-box .path{
+    animation: loading-dash 1.5s ease-in-out infinite;
+    stroke-dasharray: 90,150;
+    stroke-dashoffset: 0;
+    stroke-width: 2;
+    stroke: #20a0ff;
+    stroke-linecap: round;
+}
+
+@keyframes loading-rotate {
+    100% {
+        transform: rotate(1turn);
+    }
+}
+
+@keyframes  loading-dash{
+    0% {
+        stroke-dasharray: 1,200;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 90,150;
+        stroke-dashoffset: -40px;
+    }
+
+    100% {
+        stroke-dasharray: 90,150;
+        stroke-dashoffset: -120px;
+    }
+}

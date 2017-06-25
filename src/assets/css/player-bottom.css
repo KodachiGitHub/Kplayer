@@ -1,0 +1,314 @@
+#music-player{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top:0;
+    bottom: 0;
+    overflow: hidden;
+}
+.player-bottom{
+    width: 100%;
+    height: 2.3rem;
+    padding-top: .15rem;
+    position: absolute;
+    bottom: 0;
+    left:0;
+    background-color: rgba(255,255,255,.9);
+}
+.cover{
+    width: 2.1rem;
+    height: 2.1rem;
+    margin: -3px 7px 0 5px;
+    flex-shrink: 0;
+}
+.cover img{
+    display: block;
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
+}
+.progress{
+    height: .1rem;
+    background-color: #C10D0C;
+    position: absolute;
+    bottom: 0;
+    left:0;
+}
+.info{
+    margin-right: .3rem;
+    overflow: hidden;
+}
+.music-name{
+    font-size: .75rem;
+    margin: 0 0 .35rem 0;
+    text-overflow: ellipsis;
+    width: auto;
+    overflow: hidden;
+    white-space: nowrap;
+    flex-wrap: nowrap;
+}
+.author{
+    margin: .4em 0 0 0;
+    color: #c0c0c0;
+    font-size: 12px;
+}
+.controls{
+    flex-shrink: 0;
+    margin-right: .25rem;
+}
+.iconfont{
+    margin: 0 .2rem;
+    color:#C10D0C;
+    font-size: 1.1rem;
+    line-height: 2rem;
+}
+
+/*播放列表*/
+.list-container{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left:0;
+    overflow: hidden;
+}
+.list-wrap{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left:0;
+    background-color: rgba(0,0,0,.5);
+}
+.music-list{
+    width: 100%;
+    height: 50%;
+    position: absolute;
+    bottom: 0;
+    background-color: #fff;
+    font-size: .75rem;
+}
+.slide-enter-active {
+    animation: slide-in .5s;
+}
+.slide-leave-active {
+    animation: slide-out .5s;
+}
+@keyframes slide-in {
+    0% {
+        transform: translate(0,100%);
+    }
+    100% {
+        transform: translate(0,0);
+    }
+}
+@keyframes slide-out {
+    0% {
+        transform: translate(0,0);
+    }
+    100% {
+        transform: translate(0,100%);
+    }
+}
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+}
+.fade-enter, .fade-leave-active {
+    opacity: 0
+}
+.list-head{
+    line-height: 2.2rem;
+    text-align: center;
+    position: relative;
+}
+.border-bottom:after{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom:0;
+    background: #ccc;
+    width: 100%;
+    height: 1px;
+    -webkit-transform: scaleY(0.5);
+    transform: scaleY(0.5);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
+.music-list ul{
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top:2.2rem;
+    bottom: 0;
+    list-style: none;
+    overflow: scroll;
+}
+.current{
+    color:#C10D0C;
+}
+.music-list li{
+    padding: 0 .25rem;
+    line-height: 1.7rem;
+    position: relative;
+}
+.icon-delete{
+    color:#ccc;
+    font-size: .6rem;
+    padding: 0 .25rem;
+    line-height: 1.7rem;
+}
+.music-list .music-name{
+    max-width: 65%;
+    margin-bottom: 0;
+}
+.music-list .author{
+    margin-top: 0;
+    font-size: .5rem;
+    color:#ccc;
+}
+
+/*全屏播放组件*/
+.player-full{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left:0;
+    background-color: #3c3f41;
+}
+.background{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;
+    left:0;
+    -moz-filter: blur(70px);
+    -webkit-filter: blur(70px);
+    -o-filter: blur(70px);
+    -ms-filter: blur(70px);
+    filter: blur(70px);
+}
+.player-container{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: hidden;
+}
+.bar-header{
+    padding: 8px .25rem;
+}
+.bar-header .info{
+    margin-left: .5rem;
+}
+.bar-header p{
+    margin: 0;
+    color:#fff;
+}
+.bar-header .author{
+    color:#ccc;
+}
+.player-full .iconfont{
+    color:#fff;
+}
+.cover-big{
+    position: relative;
+    margin-top: 1rem;
+    left:15%;
+    width: 70%;
+    height: 0;
+    overflow: hidden;
+    padding-bottom: 70%; /* 关键就在这里 */
+}
+.cover-big img{
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: absolute;
+    top:0;
+    left:0;
+    border-radius: 50%;
+}
+.control-box{
+    width: 100%;
+    padding-bottom: 1rem;
+    position: absolute;
+    bottom: 0;
+}
+.time-bar{
+    padding: 0 .5rem;
+    margin-bottom: .75rem;
+}
+.progress-bar{
+    height: .14rem;
+    background-color: #fff;
+    position: relative;
+}
+.progress-bar .progress{
+    height: 100%;
+}
+.time{
+    margin: 0 .4rem;
+    color:#ccc;
+    font-size: .5rem;
+}
+.time-point{
+    width: .4rem;
+    height: .4rem;
+    margin-left: -.2rem;
+    position: absolute;
+    top:-.13rem;
+    border-radius: 50%;
+    background-color: #fff;
+}
+
+.swipe-enter-active {
+    animation: swipe-in .6s;
+}
+.swipe-leave-active {
+    animation: swipe-out .6s;
+}
+@keyframes swipe-in {
+    0% {
+        transform: translate(100%,0);
+    }
+    100% {
+        transform: translate(0,0);
+    }
+}
+@keyframes swipe-out {
+    0% {
+        transform: translate(0,0);
+    }
+    100% {
+        transform: translate(100%,0);
+    }
+}
+.btn-box{
+    text-align: center;
+}
+.btn-play{
+    font-size: 2.3rem;
+    margin: 0 auto;
+    display: inline-block;
+    text-align: center;
+    line-height: 2.3rem;
+}
+.btn-list,.btn-next,.btn-pre{
+    font-size: 1.4rem;
+    line-height: 2.3rem;
+    position: absolute;
+}
+.btn-next{
+    left:50%;
+    margin-left: 2.2rem;
+}
+.btn-pre{
+    right:50%;
+    margin-right: 2.2rem;
+}
+.btn-list{
+    font-size: 1.2rem;
+    right: 1.5rem;
+}
+
