@@ -203,12 +203,6 @@
             listLength:function(){
                 return this.musicList.length;
             },
-            //根据旋转角度返回相应的css属性
-            rotate:function(){
-                return{
-                    transform:'rotate(' + this.rotateAngle + 'deg)'
-                }
-            },
             //随机排序后的播放列表，存储随机的数组下标
             randomList:function(){
                 let that = this;
