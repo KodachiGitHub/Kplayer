@@ -1,28 +1,29 @@
 <template>
     <div id="SongList">
-        <div>
-            <div class="flex bar-header" :style="{ backgroundColor:color }">
-                <span class="iconfont icon-back" @click="goBack"></span>
-                <div class="flex-1 info" v-if="cdList !== null">
-                    <p class="list-title">{{ cdList.dissname }}</p>
-                    <p class="list-name">{{ cdList.nickname }}</p>
-                </div>
-                <span></span>
+        <div class="flex bar-header" :style="{ backgroundColor:color }">
+            <span class="iconfont icon-back" @click="goBack"></span>
+            <div class="flex-1 info" v-if="cdList !== null">
+                <p class="list-title">{{ cdList.dissname }}</p>
+                <p class="list-name">{{ cdList.nickname }}</p>
             </div>
-            <div class="container" v-if="cdList !== null">
-                <div class="list-info"  :style="{ backgroundColor:color }" style="transition: background 1s">
-                    <img :src="cdList.logo" alt="" class="albumPic">
+            <span></span>
+        </div>
+        <div class="container" v-if="cdList !== null">
+            <div class="list-info"  :style="{ backgroundColor:color }" style="transition: background 1s">
+                <img :src="cdList.logo" alt="" class="albumPic">
+            </div>
+            <div class="loading-box" v-if="loading">
+                <svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg>
+            </div>
+            <div class="list-content" v-else>
+                <div class="flex list-header">
+                    <div @click="playList(-1)"><span class="iconfont icon-play"></span>播放全部 ({{ cdList.songlist.length }})</div>
                 </div>
-                <div class="list-content">
-                    <div class="flex list-header">
-                        <div @click="playList(-1)"><span class="iconfont icon-play"></span>播放全部 ({{ cdList.songlist.length }})</div>
-                    </div>
-                    <div class="flex song-list" v-for="(song,index) in cdList.songlist" @click="playList(index)">
-                        <div class="list-index">{{ index + 1 }}</div>
-                        <div class="flex-1 music-info">
-                            <p class="music-name">{{ song.name }}</p>
-                            <p class="music-singer">{{ song.singer[0].name }}</p>
-                        </div>
+                <div class="flex song-list" v-for="(song,index) in cdList.songlist" @click="playList(index)">
+                    <div class="list-index">{{ index + 1 }}</div>
+                    <div class="flex-1 music-info">
+                        <p class="music-name">{{ song.name }}</p>
+                        <p class="music-singer">{{ song.singer[0].name }}</p>
                     </div>
                 </div>
             </div>
@@ -37,19 +38,24 @@
             return {
                 listId:this.$route.params.id,
                 cdList:null,
+                loading:true,
             }
         },
         created:function(){
             let that = this;
-            that.$api.getCdList(that.listId).then(response => {
-                let list = response.body;
-                if(list.cdlist.length > 0){
-                    that.cdList = list.cdlist[0];
-                }
+            that.loading = true;
+            that.$api.getCdList(that.listId)
+                .then(response => {
+                    that.loading = false;
+                    let list = response.body;
+                    if(list.cdlist.length > 0){
+                        that.cdList = list.cdlist[0];
+                    }
 
-            }, response => {
-                // error callback
-            });
+                }, response => {
+                    that.loading = false;
+                    // error callback
+                });
         },
         computed:{
             musicList:function(){
@@ -161,6 +167,7 @@
 
     .container{
         width: 100%;
+        min-height: 100%;
         top:0;
         bottom:0;
         padding-bottom: 2.45rem;
@@ -234,5 +241,16 @@
         margin: .2em 0 0 0;
         color: #c0c0c0;
         font-size: 12px;
+    }
+
+    .loading-box{
+        position: relative;
+    }
+    .loading-box .circular {
+        margin: 3rem auto 0 auto;
+        display: block;
+        position: relative;
+        top:auto;
+        left:auto;
     }
 </style>
