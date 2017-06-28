@@ -1,6 +1,8 @@
 # Kplayer
 
-> a music player demo based on vue.js
+> a music player demo based on vue.js.
+
+link for demo:http://kodachi.cn
 
 ## Build Setup
 
