@@ -320,7 +320,7 @@
                 img.onload = function(){
                     ctx.clearRect( 0, 0, canvas.width, canvas.height );
                     ctx.drawImage(img,(500 - ratio * 500)/2,0,ratio * 500,500,0,0,canvas.width,canvas.height);
-                    stackBlur.stackBlurCanvasRGB('player-background',0,0,canvas.width,canvas.height,100);
+                    stackBlur.stackBlurCanvasRGB('player-background',0,0,canvas.width,canvas.height,150);
                 };
             },
             play:function(){
