@@ -10,7 +10,8 @@ function apiFactory(api) {
         api.url,
         {
             params: api.params(id),
-            jsonp: api.jsonp
+            jsonp: api.jsonp,
+            jsonpCallback:api.jsonpCallback || ''
         }
     )
 }

@@ -238,29 +238,28 @@ export default {
         jsonp:'callback'
     },
     cd:{
-        url:'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg',
+        url:'http://66.112.218.34:8090/cdlist',
         params:(id)=>{
             return {
+                url:'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg',
+                type:1,
+                json:1,
+                onlysong:0,
+                disstid:id,
+                format:'jsonp',
                 g_tk:5381,
                 uin:0,
-                format:'jsonp',
+                loginUin:0,
+                hostUin:0,
                 inCharset:'utf-8',
                 outCharset:'utf-8',
                 notice:0,
-                platform:'h5',
-                needNewCode:1,
-                new_format:1,
-                pic:500,
-                disstid:id,
-                type:1,
-                json:1,
-                utf8:1,
-                onlysong:0,
-                nosign:1,
-                _:new Date().getTime()
+                platform:'yqq',
+                needNewCode:0,
             }
         },
-        jsonp: 'jsonpCallback'
+        jsonp: 'jsonpCallback',
+        jsonpCallback:'cdlistCaallback'
     },
     first_page_data:{
         url:"https://c.y.qq.com/v8/fcg-bin/fcg_first_yqq.fcg",

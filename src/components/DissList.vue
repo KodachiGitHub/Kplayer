@@ -22,7 +22,7 @@
                 <div class="flex song-list" v-for="(song,index) in cdList.songlist" @click="playList(index)">
                     <div class="list-index">{{ index + 1 }}</div>
                     <div class="flex-1 music-info">
-                        <p class="music-name">{{ song.name }}</p>
+                        <p class="music-name">{{ song.songname }}</p>
                         <p class="music-singer">{{ song.singer[0].name }}</p>
                     </div>
                 </div>
@@ -65,15 +65,15 @@
                     for(let i = 0; i < that.cdList.songlist.length; i ++){
                         let data = that.cdList.songlist[i];
                         list.push({
-                            name:data.name,
+                            name:data.songname || '',
                             author:data.singer[0].name,
-                            cover:'https://y.gtimg.cn/music/photo_new/T002R500x500M000' + data.album.mid + '.jpg',
+                            cover:'https://y.gtimg.cn/music/photo_new/T002R500x500M000' + data.albummid + '.jpg',
                             current:false,
-                            id:data.id,
-                            src:'http://ws.stream.qqmusic.qq.com/' + data.id + '.m4a?fromtag=46',
-                            albumname:data.album.name,
-                            albummid:data.album.mid,
-                            albumid:data.album.id,
+                            id:data.songid,
+                            src:'http://ws.stream.qqmusic.qq.com/' + data.songid + '.m4a?fromtag=46',
+                            albumname:data.albumname,
+                            albummid:data.albummid,
+                            albumid:data.albumid,
                             singerid:data.singer[0].id,
                             singermid:data.singer[0].mid,
                         });
