@@ -238,27 +238,28 @@ export default {
         jsonp:'callback'
     },
     cd:{
-        url:'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg',
+        url:'http://66.112.218.34:8090/cdlist',
         params:(id)=>{
             return {
+                url:'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg',
                 type:1,
                 json:1,
-                utf8:1,
                 onlysong:0,
                 disstid:id,
                 format:'jsonp',
+                g_tk:5381,
+                uin:0,
+                loginUin:0,
+                hostUin:0,
                 inCharset:'utf-8',
                 outCharset:'utf-8',
                 notice:0,
                 platform:'yqq',
                 needNewCode:0,
-                g_tk:5381,
-                loginUin:0,
-                hostUin:0,
             }
         },
         jsonp: 'jsonpCallback',
-        callbackName:'playlistinfoCallback'
+        jsonpCallback:'cdlistCaallback'
     },
     first_page_data:{
         url:"https://c.y.qq.com/v8/fcg-bin/fcg_first_yqq.fcg",

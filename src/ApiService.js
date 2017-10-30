@@ -11,7 +11,7 @@ function apiFactory(api) {
         {
             params: api.params(id),
             jsonp: api.jsonp,
-            jsonpCallback:api.callbackName
+            jsonpCallback:api.jsonpCallback || ''
         }
     )
 }
