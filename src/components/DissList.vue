@@ -33,6 +33,7 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     export default {
         data (){
             return {
@@ -44,15 +45,18 @@
         created:function(){
             let that = this;
             that.loading = true;
+
             that.$api.getCdList(that.listId)
                 .then(response => {
                     that.loading = false;
+                    console.log(response);
                     let list = response.body;
                     if(list.cdlist.length > 0){
                         that.cdList = list.cdlist[0];
                     }
 
                 }, response => {
+                    console.log(response);
                     that.loading = false;
                     // error callback
                 });

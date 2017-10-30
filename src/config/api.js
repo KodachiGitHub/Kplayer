@@ -241,26 +241,24 @@ export default {
         url:'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg',
         params:(id)=>{
             return {
-                g_tk:5381,
-                uin:0,
-                format:'jsonp',
-                inCharset:'utf-8',
-                outCharset:'utf-8',
-                notice:0,
-                platform:'h5',
-                needNewCode:1,
-                new_format:1,
-                pic:500,
-                disstid:id,
                 type:1,
                 json:1,
                 utf8:1,
                 onlysong:0,
-                nosign:1,
-                _:new Date().getTime()
+                disstid:id,
+                format:'jsonp',
+                inCharset:'utf-8',
+                outCharset:'utf-8',
+                notice:0,
+                platform:'yqq',
+                needNewCode:0,
+                g_tk:5381,
+                loginUin:0,
+                hostUin:0,
             }
         },
-        jsonp: 'jsonpCallback'
+        jsonp: 'jsonpCallback',
+        callbackName:'playlistinfoCallback'
     },
     first_page_data:{
         url:"https://c.y.qq.com/v8/fcg-bin/fcg_first_yqq.fcg",

@@ -82,7 +82,7 @@
                     }
                     return list;
                 }
-            }
+            },
         },
         methods:{
             goBack:function(){
