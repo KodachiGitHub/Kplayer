@@ -21,7 +21,8 @@ export default new Vuex.Store({
         musicList:[],
         playing:false,
         action:'',
-        index:-1
+        index:-1,
+        loginInfo:null
     },
     getters: {
         newMusicList: state => {

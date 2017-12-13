@@ -1,7 +1,7 @@
 <template>
     <div id="app">
         <header class="flex header">
-            <span class="iconfont icon-menu" style="opacity: 0"></span>
+            <span class="iconfont icon-menu" @click="openPanel"></span>
             <div class="flex-1 flex tabs">
                 <div class="flex-1"></div>
                 <span class="iconfont icon-music" :class="{ 'tab-current': currentTab === 'music'}" @click="changeTab('music')"></span>
@@ -48,9 +48,9 @@
             closePanel:function(){
                 this.panelShow = false;
             },
-            /*openPanel:function(){
+            openPanel:function(){
                 this.panelShow = true;
-            },*/
+            },
             changeTab:function(tab){
                 this.currentTab = tab;
             }

@@ -153,7 +153,7 @@
                 lyric:null,
                 showLyric:false,
                 lyricIndex:0,
-                initScrollHeight:document.querySelector('body').offsetHeight / 2 - 80,
+                initScrollHeight:document.querySelector('body').offsetHeight / 2 - 25,
                 windowHeight:null,
                 lyricScroll:null,
                 scrollHeightFix:0, //有些歌词可能会占据超过两行的空间，用这个校准
@@ -898,7 +898,7 @@
         top:3rem;
         bottom:6.5rem;
         overflow: hidden;
-        color: #ccc;
+        color: #fff;
         text-align: center;
         font-size: .7rem;
     }

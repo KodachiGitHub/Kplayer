@@ -3,22 +3,19 @@
  */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import RankList from './components/RankList.vue'
-import Search from './components/Search.vue'
-import DissList from './components/DissList.vue'
-import Album from './components/Album.vue'
-import Singer from './components/Singer.vue'
 
 Vue.use(VueRouter);
 
 const routes = [
-    { path: '/rankList/:id',name:'rankList',component: RankList},
-    { path: '/search',name:'search',component: Search},
-    { path: '/dissList/:id',name:'dissList',component: DissList},
-    { path: '/album/:id',name:'album',component: Album},
-    { path: '/singer/:id',name:'singer',component: Singer},
+    { path: '/rankList/:id',name:'rankList',component: resolve => require(['./components/RankList.vue'], resolve)},
+    { path: '/search',name:'search',component: resolve => require(['./components/Search.vue'], resolve)},
+    { path: '/dissList/:id',name:'dissList',component: resolve => require(['./components/DissList.vue'], resolve)},
+    { path: '/album/:id',name:'album',component: resolve => require(['./components/Album.vue'], resolve)},
+    { path: '/singer/:id',name:'singer',component: resolve => require(['./components/Singer.vue'], resolve)},
 ];
 
-export default new VueRouter({
+let router = new VueRouter({
     routes,
-})
+});
+
+export default router

@@ -1,11 +1,11 @@
 <template>
     <div id="user-panel">
         <transition name="fade">
-            <div v-show="slideShow" class="wrap" v-on:click="wrapClick"></div>
+            <div v-show="slideShow" class="wrap" @click="wrapClick"></div>
         </transition>
         <transition name="slide" @after-leave="afterLeave">
             <div v-show="slideShow" class="panel-container">
-                <h1>Music Player</h1>
+                <div class="panel-header" :style="{background:'url(http://p1.music.126.net/i0qi6mibX8gq2SaLF1bYbA==/2002210674180198.jpg) center center /cover no-repeat'}"></div>
             </div>
         </transition>
     </div>
@@ -54,13 +54,19 @@
     .panel-container{
         width: 80%;
         height: 100%;
-        padding-left: .7rem;
         position: absolute;
         top:0;
         left:0;
         background-color: #fff;
         /*background:url('../assets/bg-panel.jpg') center center /cover no-repeat;*/
     }
+
+    .panel-header{
+        width: 100%;
+        height: 8.5rem;
+    }
+
+
     .slide-enter-active {
         animation: panel-slide-in .5s;
     }

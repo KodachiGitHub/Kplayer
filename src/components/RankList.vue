@@ -1,7 +1,7 @@
 <template>
     <div id="SongList">
         <div style="height: 100%;">
-            <div class="flex bar-header" :style="{ backgroundColor:color }">
+            <div class="flex bar-header" :class="headerClass">
                 <span class="iconfont icon-back" @click="goBack"></span>
                 <div class="flex-1 info">
                     <p class="list-title">排行榜</p>
@@ -11,12 +11,13 @@
             </div>
             <div class="container">
                 <div class="list-info"  :style="{ backgroundColor:color }" style="transition: background 1s">
+                    <canvas id="header-bg" class="background"></canvas>
                     <div class="albumPic"><img v-if="topList.topinfo" :src="topList.topinfo.MacListPicUrl" alt=""></div>
                 </div>
                 <div class="loading-box" v-if="loading">
                     <svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg>
                 </div>
-                <div class="list-content" v-else>
+                <div class="list-content" v-show="!loading">
                     <div class="flex list-header">
                         <div @click="playList(-1)"><span class="iconfont icon-play"></span>播放全部</div>
                     </div>
@@ -35,6 +36,7 @@
 </template>
 
 <script>
+    import stackBlur from './../stackBlur.js'
     export default {
         data (){
             return {
@@ -43,6 +45,7 @@
                     color:'#000',
                 },
                 color:'#000',
+                headerClass:'',
                 loading:true,
             }
         },
@@ -58,6 +61,20 @@
                 }, response => {
                     // error callback
                 });
+        },
+        mounted:function(){
+            let that = this;
+            //that.initCanvas();
+
+            let list = document.querySelector('.list-content');
+            let container = document.querySelector('#SongList');
+            container.onscroll = function(){
+                if(list.getBoundingClientRect().top <= 60){
+                    that.headerClass = 'header-fiexd';
+                }else{
+                    that.headerClass = '';
+                }
+            }
         },
         computed:{
             musicList:function(){
@@ -85,6 +102,32 @@
             },
         },
         methods:{
+            initCanvas(){
+                let that = this;
+                that.playerBackground = document.querySelector('#player-background');
+
+                that.windowRatio = document.body.clientWidth/document.body.clientHeight;
+                let canvas = that.playerBackground;
+                canvas.width = document.body.clientWidth;
+                canvas.height = document.body.clientHeight;
+                that.drawBackground();
+            },
+            drawBackground(){
+                let that = this;
+                let ratio = that.windowRatio;
+                let canvas = that.playerBackground;
+                let ctx = canvas.getContext('2d');
+
+                let img = document.createElement('img');
+                img.crossOrigin = '';
+                img.src = that.music.cover;
+
+                img.onload = function(){
+                    ctx.clearRect( 0, 0, canvas.width, canvas.height );
+                    ctx.drawImage(img,(500 - ratio * 500)/2,0,ratio * 500,500,0,0,canvas.width,canvas.height);
+                    stackBlur.stackBlurCanvasRGB('player-background',0,0,canvas.width,canvas.height,150);
+                };
+            },
             goBack:function(){
                 this.$router.go(-1);
             },
@@ -120,10 +163,11 @@
         width: 100%;
         padding: .3rem .25rem;
         color:#fff;
-        position: absolute;
+        position: fixed;
         top:0;
         left:0;
         z-index: 10;
+        background-color: rgba(255,255,255,.4);
     }
     .bar-header .iconfont{
         color: #fff;
@@ -158,6 +202,12 @@
     .list-name{
         font-size: .6rem;
     }
+    .header-fiexd{
+        background-color: #fff;
+    }
+    .header-fiexd .icon-back,.header-fiexd .list-title{
+        color:#2c3e50;
+    }
 
     .container{
         width: 100%;
@@ -169,6 +219,15 @@
     }
     .list-info{
         padding: 3rem .5rem .4rem .5rem;
+        position: relative;
+    }
+    .background{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: .6;
     }
     .albumPic{
         width: 6rem;
