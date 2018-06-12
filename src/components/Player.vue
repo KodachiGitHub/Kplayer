@@ -505,7 +505,7 @@
                     that.lyric = null;
                     that.$api.getLyric(newValue.mid)
                         .then(response => {
-                            let lyric = _utf8_decode(response.body.lyric).split('\n');
+                            let lyric = _utf8_decode(atob(response.body.lyric)).split('\n');
                             if(lyric[0].indexOf('[0') !== 0){
                                 lyric.splice(0,5);
                             }

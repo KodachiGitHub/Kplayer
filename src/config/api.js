@@ -227,9 +227,10 @@ export default {
         jsonp: 'jsonpCallback'
     },
     lyric: {
-        url: 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg',
+        url: 'http://66.112.218.34:8090/getLyric',
         params: (mid) => {
             return {
+                url: 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg',
                 pcachetime:Date.parse(new Date()),
                 songmid:mid,
                 g_tk:1837373724,
@@ -240,7 +241,8 @@ export default {
                 notice:0,
                 platform:'yqq',
                 needNewCode:0,
-                format:'jsonp'
+                format:'jsonp',
+                callback:'MusicJsonCallback_lrc'
             }
         },
         jsonp: 'jsonpCallback',
