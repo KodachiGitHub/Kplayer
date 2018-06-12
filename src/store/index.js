@@ -67,6 +67,7 @@ export default new Vuex.Store({
             }else{
                 state.index = index;
             }
+            console.log('yes');
             state.playing = true;
         },
         addMusic(state,music){

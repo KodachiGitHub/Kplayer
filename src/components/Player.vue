@@ -485,17 +485,27 @@
                 let that = this;
                 if(newValue.id !== oldValue.id){
                     that.drawBackground();
-                    that.player.src = '';
-                    that.player.src = newValue.src;
-                    if(that.playing){
-                        setTimeout(function(){
-                            that.player.play();
-                        },300);
-                    }
+
+                    that.$api.music_vKey(newValue.mid)
+                        .then(res => {
+                            console.log(res.body);
+                            let musicData = res.body.data.items[0];
+                            let musicUrl = `http://dl.stream.qqmusic.qq.com/${musicData.filename}?vkey=${musicData.vkey}&guid=3655047200&fromtag=66`;
+                            that.player.src = '';
+                            that.player.src = musicUrl;
+                            console.log('yes');
+
+                            if(that.playing){
+                                setTimeout(function(){
+                                    that.player.play();
+                                },300);
+                            }
+                        });
+
                     that.lyric = null;
-                    that.$api.getLyric(newValue.id)
+                    that.$api.getLyric(newValue.mid)
                         .then(response => {
-                            let lyric = _utf8_decode(atob(response.body.lyric)).split('\n');
+                            let lyric = _utf8_decode(response.body.lyric).split('\n');
                             if(lyric[0].indexOf('[0') !== 0){
                                 lyric.splice(0,5);
                             }
@@ -522,7 +532,7 @@
                     that.$nextTick(() => {
                         let playerBackgroundImage = document.querySelector('#player-background');
                         playerBackgroundImage.onload = function(){
-                            console.log(playerBackgroundImage.src,playerBackgroundImage.naturalWidth,playerBackgroundImage.naturalHeight);
+                            // console.log(playerBackgroundImage.src,playerBackgroundImage.naturalWidth,playerBackgroundImage.naturalHeight);
                         };
                     });
                 }

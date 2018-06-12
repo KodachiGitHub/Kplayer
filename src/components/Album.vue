@@ -68,7 +68,7 @@
                             cover:'https://y.gtimg.cn/music/photo_new/T002R500x500M000' + data.albummid + '.jpg',
                             current:false,
                             id:data.songid,
-                            src:'http://ws.stream.qqmusic.qq.com/' + data.songid + '.m4a?fromtag=46',
+                            mid:data.songmid,
                             albumname:data.albumname,
                             albummid:data.albummid,
                             albumid:data.albumid,

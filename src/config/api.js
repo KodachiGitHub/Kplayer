@@ -227,15 +227,24 @@ export default {
         jsonp: 'jsonpCallback'
     },
     lyric: {
-        url: 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric.fcg',
-        params: (id) => {
+        url: 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg',
+        params: (mid) => {
             return {
-                nobase64:1,
-                musicid:id,
-                songtype:0
+                pcachetime:Date.parse(new Date()),
+                songmid:mid,
+                g_tk:1837373724,
+                loginUin:0,
+                hostUin:0,
+                inCharset:'utf8',
+                outCharset:'utf-8',
+                notice:0,
+                platform:'yqq',
+                needNewCode:0,
+                format:'jsonp'
             }
         },
-        jsonp:'callback'
+        jsonp: 'jsonpCallback',
+        jsonpCallback:'MusicJsonCallback_lrc'
     },
     cd:{
         url:'http://66.112.218.34:8090/cdlist',
@@ -299,5 +308,25 @@ export default {
             }
         },
         jsonp: 'jsonpCallback'
+    },
+    music_vKey:{
+        url:'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg',
+        params:(mid) => {
+            return {
+                g_tk:1278911659,
+                hostUin:0,
+                inCharset:'utf8',
+                outCharset:'utf-8',
+                notice:0,
+                platform:'yqq',
+                needNewCode:0,
+                cid:205361747,
+                uin:0,
+                songmid:mid,
+                filename:'C400' + mid + '.m4a',
+                guid:3655047200
+            }
+        },
     }
+
 }

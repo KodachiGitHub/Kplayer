@@ -53,9 +53,10 @@ export default {
     getCdList(id){
         return apiFactory(API.cd)(id)
     },
-    getLyric(id){
-        return Vue.http.jsonp('https://api.darlin.me/music/lyric/'+id+'/',{
-            jsonp:'callback'
-        })
+    getLyric(mid){
+        return apiFactory(API.lyric)(mid)
+    },
+    music_vKey(mid){
+        return apiFactory(API.music_vKey)(mid)
     }
 }
