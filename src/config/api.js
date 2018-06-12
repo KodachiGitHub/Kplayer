@@ -1,6 +1,3 @@
-/**
- * Created by sioxa on 2016/12/25 0025.
- */
 export default {
     rank_songs: {
         url: 'https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg',

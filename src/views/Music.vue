@@ -3,7 +3,7 @@
         <div class="loading-box" v-if="loading">
             <svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg>
         </div>
-        <template v-else>
+        <div class="music-list" ref="music-list" v-else>
             <div class="swiper-header">
                 <div class="swiper-wrapper" v-if="data !== null">
                     <div  v-for="item in data.focus" class="swiper-slide">
@@ -19,7 +19,7 @@
                     <p :title="item.dissname" class="diss-name">{{ item.dissname }}</p>
                 </div>
             </div>
-        </template>
+        </div>
     </div>
 </template>
 
@@ -45,7 +45,7 @@
                         let mySwiper = new Swiper('.swiper-header', {
                             autoplay: 2000,//可选选项，自动滑动
                             pagination : '.swiper-pagination',
-                        })
+                        });
                     })
                 }, response => {
                     that.loading = false;
@@ -83,7 +83,7 @@
     }
 
     .hot-diss{
-        padding-bottom: 2.45rem;
+        padding-bottom: .5rem;
         flex-wrap: wrap;
     }
     .hot-diss .col-33{
@@ -109,5 +109,9 @@
         display: -webkit-box;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
+    }
+    .music-list{
+        width: 100%;
+        height: 100%;
     }
 </style>

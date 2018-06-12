@@ -1,6 +1,3 @@
-/**
- * Created by sioxa on 2016/12/25 0025.
- */
 import Vue from 'vue'
 
 import API from './config/api'

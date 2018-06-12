@@ -220,6 +220,7 @@
     }
     .list-info{
         height: 12rem;
+        background-color: #3c3f41;
     }
 
     .list-content{

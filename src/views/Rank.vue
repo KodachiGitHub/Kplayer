@@ -3,23 +3,25 @@
         <div class="loading-box" v-if="loading">
             <svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg>
         </div>
-        <ul v-else>
-            <li class="flex rank-item" v-for="item in topList" @click="showRank(item.id)">
-                <div class="rank-media">
-                    <img :src="item.picUrl" alt="">
-                    <span class="listen-count">{{item.listenCount | listenCount}}</span>
-                </div>
-                <div class="flex-1 rank-info">
-                    <p class="rank-songs" v-for="(song,index) in item.songList">
-                        {{index+1}}{{song.songname}}<span class="rank-singername">-{{song.singername}}</span>
-                    </p>
-                </div>
-            </li>
-        </ul>
+        <div v-else ref="music-list" class="music-list">
+            <ul >
+                <li class="flex rank-item" v-for="item in topList" @click="showRank(item.id)">
+                    <div class="rank-media">
+                        <img :src="item.picUrl" alt="">
+                        <span class="listen-count">{{item.listenCount | listenCount}}</span>
+                    </div>
+                    <div class="flex-1 rank-info">
+                        <p class="rank-songs" v-for="(song,index) in item.songList">
+                            {{index+1}}{{song.songname}}<span class="rank-singername">-{{song.singername}}</span>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
     export default {
         data () {
             return {
@@ -40,6 +42,8 @@
                 .then(response => {
                     that.loading = false;
                     that.topList = response.body.data.topList;
+                    that.$nextTick(() => {
+                    });
                 }, response => {
                     // error callback
                 });
@@ -56,7 +60,7 @@
 <style scoped>
     .rank ul {
         margin: 0;
-        padding: .5rem .5rem 2.45rem .5rem;
+        padding: .5rem;
         list-style: none;
         background-color: hsla(0, 0%, 90%, 1);
     }
@@ -68,6 +72,9 @@
         box-shadow: 0 0 .5rem #DDD;
         border-radius: .25rem;
         overflow: hidden;
+    }
+    .rank-item:nth-last-child(1){
+        margin: 0;
     }
 
     .rank-item .rank-media {
@@ -110,4 +117,8 @@
         color: #8f8f8f;
     }
 
+    .music-list{
+        width: 100%;
+        height: 100%;
+    }
 </style>

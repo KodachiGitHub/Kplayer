@@ -1,32 +1,29 @@
 <template>
     <div id="SongList">
-        <div>
-            <div class="flex bar-header" :style="{ backgroundColor:color }">
-                <span class="iconfont icon-back" @click="goBack"></span>
-                <div class="flex-1 info" v-if="album !== null">
-                    <p class="list-title">专辑</p>
-                    <!--<p class="list-name">{{ album.singername }}</p>-->
-                </div>
+        <div class="flex bar-header" :style="{ backgroundColor:color }">
+            <span class="iconfont icon-back" @click="goBack"></span>
+            <div class="flex-1 info" v-if="cdList !== null">
+                <p class="list-title">{{ cdList.dissname }}</p>
+                <p class="list-name">{{ cdList.nickname }}</p>
             </div>
-            <div class="container" v-if="album !== null">
-                <div class="flex list-info"  :style="{ backgroundColor:color }" style="transition: background 1s">
-                    <img :src="cover" alt="" class="albumPic">
-                    <div>
-                        <p class="album-name">{{ album.name }}</p>
-                        <p>发行时间：{{ album.aDate }}</p>
-                        <p>歌手：{{ album.singername }}</p>
-                    </div>
+            <span></span>
+        </div>
+        <div class="container" v-if="cdList !== null">
+            <div class="list-info"  :style="{ backgroundColor:color }" style="transition: background 1s">
+                <img :src="cdList.logo" alt="" class="albumPic">
+            </div>
+            <div class="loading-box" v-if="loading">
+                <svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg>
+            </div>
+            <div class="list-content" v-else>
+                <div class="flex list-header">
+                    <div @click="playList(-1)"><span class="iconfont icon-play"></span>播放全部 ({{ cdList.songlist.length }})</div>
                 </div>
-                <div class="list-content">
-                    <div class="flex list-header">
-                        <div @click="playList(-1)"><span class="iconfont icon-play"></span>播放全部 ({{ album.list.length }})</div>
-                    </div>
-                    <div class="flex song-list" v-for="(song,index) in album.list" @click="playList(index)">
-                        <div class="list-index">{{ index + 1 }}</div>
-                        <div class="flex-1 music-info">
-                            <p class="music-name">{{ song.songname }}</p>
-                            <p class="music-singer">{{ song.singer[0].name }}</p>
-                        </div>
+                <div class="flex song-list" v-for="(song,index) in cdList.songlist" @click="playList(index)">
+                    <div class="list-index">{{ index + 1 }}</div>
+                    <div class="flex-1 music-info">
+                        <p class="music-name">{{ song.songname }}</p>
+                        <p class="music-singer">{{ song.singer[0].name }}</p>
                     </div>
                 </div>
             </div>
@@ -36,34 +33,42 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     export default {
         data (){
             return {
-                albumid:this.$route.params.id,
-                album:null,
+                listId:this.$route.params.id,
+                cdList:null,
+                loading:true,
             }
         },
         created:function(){
             let that = this;
-            that.$api.getAlbum(that.albumid).then(response => {
-                console.log(response.body.data);
-                that.album = response.body.data;
-            }, response => {
-                // error callback
-            });
+            that.loading = true;
+
+            that.$api.getCdList(that.listId)
+                .then(response => {
+                    that.loading = false;
+                    console.log(response.body);
+                    let list = response.body;
+                    if(list.cdlist.length > 0){
+                        that.cdList = list.cdlist[0];
+                    }
+
+                }, response => {
+                    that.loading = false;
+                    // error callback
+                });
         },
         computed:{
-            cover:function(){
-                return 'https://y.gtimg.cn/music/photo_new/T002R500x500M000' + this.album.mid + '.jpg';
-            },
             musicList:function(){
                 let that = this;
                 let list = [];
-                if(that.album.list){
-                    for(let i = 0; i < that.album.list.length; i ++){
-                        let data = that.album.list[i];
+                if(that.cdList.songlist){
+                    for(let i = 0; i < that.cdList.songlist.length; i ++){
+                        let data = that.cdList.songlist[i];
                         list.push({
-                            name:data.songname,
+                            name:data.songname || '',
                             author:data.singer[0].name,
                             cover:'https://y.gtimg.cn/music/photo_new/T002R500x500M000' + data.albummid + '.jpg',
                             current:false,
@@ -73,24 +78,32 @@
                             albummid:data.albummid,
                             albumid:data.albumid,
                             singerid:data.singer[0].id,
-                            singermid:data.singer[0].mid
+                            singermid:data.singer[0].mid,
                         });
                     }
                     return list;
                 }
             },
             color: function () {
-                if (this.album !== null) {
-                    let fixed = '00000' + this.album.color.toString(16);
+                if (this.cdList !== null) {
+                    let fixed = '00000' + this.cdList.uin.toString(16);
                     return '#' + fixed.substr(fixed.length - 6)
                 } else {
-                    return '#ffffff'
+                    return '#3c3f41'
                 }
             },
         },
         methods:{
             goBack:function(){
                 this.$router.go(-1);
+            },
+            getAlbum:function(id){
+                this.$api.getAlbum(id)
+                    .then(response => {
+                        console.log(response);
+                    }, response => {
+                        // error callback
+                    });
             },
             playList:function(index){
                 let that = this;
@@ -99,6 +112,7 @@
                 }else{
                     this.$store.commit('replaceList', this.musicList);
                 }
+
             }
         }
     }
@@ -156,31 +170,19 @@
 
     .container{
         width: 100%;
+        min-height: 100%;
         top:0;
         bottom:0;
         padding-bottom: 2.45rem;
+        background-color: #fff;
     }
     .list-info{
         padding: 3rem .5rem .4rem .5rem;
-    }
-    .list-info p{
-        color:#fff;
-        font-size: .6rem;
-        margin: .5em 0;
-    }
-    .album-name{
-        margin: .7em 0!important;
-        text-overflow: ellipsis;
-        width: auto;
-        overflow: hidden;
-        white-space: nowrap;
-        flex-wrap: nowrap;
-        font-size: .75rem!important;
+        background-color: #3c3f41;
     }
     .albumPic{
         width: 6rem;
         height: 6rem;
-        margin-right: .4rem;
     }
 
     .list-content{
@@ -231,6 +233,7 @@
     }
     .music-name{
         font-size: .7rem;
+        line-height: 1rem;
         margin: 0;
         text-overflow: ellipsis;
         width: auto;
@@ -242,5 +245,16 @@
         margin: .2em 0 0 0;
         color: #c0c0c0;
         font-size: 12px;
+    }
+
+    .loading-box{
+        position: relative;
+    }
+    .loading-box .circular {
+        margin: 3rem auto 0 auto;
+        display: block;
+        position: relative;
+        top:auto;
+        left:auto;
     }
 </style>

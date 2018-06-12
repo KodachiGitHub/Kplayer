@@ -7,11 +7,11 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter);
 
 const routes = [
-    { path: '/rankList/:id',name:'rankList',component: resolve => require(['./components/RankList.vue'], resolve)},
-    { path: '/search',name:'search',component: resolve => require(['./components/Search.vue'], resolve)},
-    { path: '/dissList/:id',name:'dissList',component: resolve => require(['./components/DissList.vue'], resolve)},
-    { path: '/album/:id',name:'album',component: resolve => require(['./components/Album.vue'], resolve)},
-    { path: '/singer/:id',name:'singer',component: resolve => require(['./components/Singer.vue'], resolve)},
+    { path: '/rankList/:id',name:'rankList',component: resolve => require(['./views/RankList.vue'], resolve)},
+    { path: '/search',name:'search',component: resolve => require(['./views/Search.vue'], resolve)},
+    { path: '/dissList/:id',name:'dissList',component: resolve => require(['./views/DissList.vue'], resolve)},
+    { path: '/album/:id',name:'album',component: resolve => require(['./views/Album.vue'], resolve)},
+    { path: '/singer/:id',name:'singer',component: resolve => require(['./views/Singer.vue'], resolve)},
 ];
 
 let router = new VueRouter({

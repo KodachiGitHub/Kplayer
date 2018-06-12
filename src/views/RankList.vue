@@ -220,6 +220,7 @@
     .list-info{
         padding: 3rem .5rem .4rem .5rem;
         position: relative;
+        background-color: #3c3f41;
     }
     .background{
         width: 100%;

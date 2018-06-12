@@ -11,10 +11,10 @@
             <router-link :to="{ name: 'search'}" class="iconfont icon-search"></router-link>
         </header>
         <transition name="music-slide">
-            <music class="tab-content" v-show="currentTab === 'music'"></music>
+            <music class="tab-content" ref="tab-content" v-show="currentTab === 'music'"></music>
         </transition>
         <transition name="rank-slide">
-            <rank class="tab-content" v-show="currentTab === 'rank'"></rank>
+            <rank class="tab-content" ref="tab-content" v-show="currentTab === 'rank'"></rank>
         </transition>
         <player></player>
         <user-panel :panelShow="panelShow" v-show="panelShow" v-on:wrapClick="closePanel"></user-panel>
@@ -27,8 +27,8 @@
 <script>
     import Player from './components/Player.vue'
     import UserPanel from './components/UserPanel.vue'
-    import Music from './components/Music.vue'
-    import Rank from './components/Rank.vue'
+    import Music from './views/Music.vue'
+    import Rank from './views/Rank.vue'
 
     export default {
         components:{
@@ -62,15 +62,16 @@
     @import 'assets/css/normalize.css';
     @import 'assets/css/common.css';
     @import url(http://at.alicdn.com/t/font_ocqohyg8c2xu5wmi.css);
+
     #app {
         font-family: '微软雅黑', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: #2c3e50;
-    }
-    .main-page{
-        position: relative;
-        z-index: 20;
+        position: absolute;
+        width: 100%;
+        top:0;
+        bottom: 0;
     }
     a {
         color: #42b983;
@@ -79,7 +80,7 @@
         width: 100%;
         height: 2rem;
         background-color: #C10D0C;
-        position: fixed;
+        position: absolute;
         top:0;
         z-index: 20;
     }
@@ -98,8 +99,9 @@
         width: 100%;
         position: absolute;
         top:2rem;
+        bottom: 2.5rem;
         background-color: hsla(0, 0%, 90%, 1);
-        min-height: 100%;
+        overflow-y: scroll;
     }
     .rank-slide-enter-active{
         animation:slide-left-in .5s;
