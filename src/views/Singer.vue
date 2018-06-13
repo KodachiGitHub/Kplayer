@@ -353,5 +353,6 @@
         font-size: .7rem;
         line-height: 1.1rem;
         margin-top: .5em;
+        white-space: pre-line;
     }
 </style>
