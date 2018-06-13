@@ -153,7 +153,8 @@
                 lyric:null,
                 showLyric:false,
                 lyricIndex:0,
-                initScrollHeight:document.querySelector('body').offsetHeight / 2 - 25,
+                //initScrollHeight:document.querySelector('body').offsetHeight / 2 - 25,
+                initScrollHeight:-35,
                 windowHeight:null,
                 lyricScroll:null,
                 scrollHeightFix:0, //有些歌词可能会占据超过两行的空间，用这个校准
@@ -256,11 +257,16 @@
                         that.duration = player.duration;
                     }
                     that.progress = player.currentTime / player.duration * 100;
+                    let preTime = that.currentTime;
                     that.currentTime = player.currentTime;
 
                     if(that.lyric !== null){
                         /*滚动歌词*/
                         let height = 0;
+                        if(preTime > that.currentTime){
+                            that.lyricIndex = 0;
+                            that.scrollHeightFix = 0;
+                        }
                         if(that.lyric[that.lyricIndex + 1] && getTime(that.lyric[that.lyricIndex + 1].time) <= that.currentTime){
                             that.lyricIndex += 1;
                             if(document.querySelector('#lyricFix')){
@@ -480,7 +486,7 @@
                     this.player.pause();
                 }
             },
-            //music指向列表中的一首歌，指向发生变化时更改audio.src属性
+            // music指向列表中的一首歌，指向发生变化时更改audio.src属性，同时获取歌词等
             music:function(newValue,oldValue){
                 let that = this;
                 if(newValue.id !== oldValue.id){
@@ -488,17 +494,16 @@
 
                     that.$api.music_vKey(newValue.mid)
                         .then(res => {
-                            console.log(res.body);
+                            // console.log(res.body);
                             let musicData = res.body.data.items[0];
                             let musicUrl = `http://dl.stream.qqmusic.qq.com/${musicData.filename}?vkey=${musicData.vkey}&guid=3655047200&fromtag=66`;
                             that.player.src = '';
                             that.player.src = musicUrl;
-                            console.log('yes');
 
                             if(that.playing){
                                 setTimeout(function(){
                                     that.player.play();
-                                },300);
+                                },200);
                             }
                         });
 
@@ -785,6 +790,7 @@
         position: relative;
         margin-top: 1rem;
         left: 20%;
+        top:5%;
         width: 60%;
         height: 0;
         overflow: hidden;
@@ -903,10 +909,9 @@
     /*歌词*/
     .lyric,.showLyric{
         width: 100%;
-        padding: 0 .5rem;
         position: absolute;
         top:3rem;
-        bottom:6.5rem;
+        bottom:6rem;
         overflow: hidden;
         color: #fff;
         text-align: center;
@@ -916,7 +921,12 @@
         color:#C10D0C;
     }
     .lyric-list{
-        transform: translate3d(0,250px,0);
+        width: 100%;
+        padding: 0 1rem;
+        position: absolute;
+        top:50%;
+        left: 0;
+
     }
     .lyric-list p,#lyricFix{
         padding: .6em 0;
