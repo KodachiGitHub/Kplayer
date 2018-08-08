@@ -22,19 +22,25 @@ export default new Vuex.Store({
         playing:false,
         action:'',
         index:-1,
-        loginInfo:null
+        loginInfo:null,
+        pageRouter:'forward'
     },
     getters: {
         newMusicList: state => {
             let len = state.musicList.length;
             let list = state.musicList;
             for(let i = 0; i < len; i++){
-                list[i].cover = 'http://66.112.218.34:8090/img?url=' + list[i].cover;
+                if(list[i].cover.indexOf('http://66.112.218.34:8090/img?url=') === -1){
+                    list[i].cover = 'http://66.112.218.34:8090/img?url=' + list[i].cover;
+                }
             }
             return list;
-        }
+        },
     },
     mutations:{
+        pageNav(state,pageRouter){
+            state.pageRouter = pageRouter;
+        },
         deleteMusic(state,index){
             state.musicList.splice(index,1);
         },

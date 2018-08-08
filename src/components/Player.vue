@@ -250,7 +250,7 @@
             that.player.addEventListener('play',function(e){
                 let player = that.player;
                 clearInterval(that.interval);
-                cancelAnimationFrame(that.rotation);
+                window.cancelAnimationFrame(that.rotation);
 
                 that.interval = setInterval(function(){
                     if(!that.duration || that.duration === 0){
@@ -284,7 +284,7 @@
                         st = new Date();
                         that.rotateAngle >= 360 ? that.rotateAngle = 0.5 : that.rotateAngle += 0.5;
                     }
-                    that.rotation = requestAnimationFrame(coverRoting);
+                    that.rotation = window.requestAnimationFrame(coverRoting);
                 };
                 coverRoting();
             },false);
@@ -337,7 +337,7 @@
             initPlayer:function(){
                 let that = this;
                 clearInterval(that.interval);
-                cancelAnimationFrame(that.rotation);
+                window.cancelAnimationFrame(that.rotation);
                 that.currentTime = 0;
                 that.duration = 0;
                 that.progress = 0;

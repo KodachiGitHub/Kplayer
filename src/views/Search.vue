@@ -51,7 +51,7 @@
         created:function(){
             this.$api.getHotKey()
                 .then(response => {
-                    console.log(response.body);
+                    // console.log(response.body);
                 },response => {
                     //error callback
                 });
@@ -81,7 +81,7 @@
                 if(that.key !== ''){
                     that.$api.searchSongs(that.key)
                         .then(response => {
-                            console.log(response.body);
+                            // console.log(response.body);
                             that.result = response.body.data.song.list;
                         }, response => {
                             // error callback
@@ -112,7 +112,7 @@
                 that.$api.getSongDetail(song.mid)
                     .then(response => {
                         let data = response.body.data[0];
-                        console.log(data);
+                        // console.log(data);
                         let music = {
                             author:data.singer[0].name,
                             cover:"https://y.gtimg.cn/music/photo_new/T002R500x500M000" + data.album.mid + ".jpg",
