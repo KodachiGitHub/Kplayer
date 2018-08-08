@@ -264,6 +264,7 @@
                         /*滚动歌词*/
                         let height = 0;
                         if(preTime > that.currentTime){
+                            // 修复单曲循环，播放结束后歌词显示位置出错的问题
                             that.lyricIndex = 0;
                             that.scrollHeightFix = 0;
                         }
@@ -278,15 +279,15 @@
                     }
 
                 },500);
-                let st = new Date();
-                let coverRoting = function(){
-                    if(new Date() - st >= 1000/40 && that.playing){
-                        st = new Date();
-                        that.rotateAngle >= 360 ? that.rotateAngle = 0.5 : that.rotateAngle += 0.5;
-                    }
-                    that.rotation = window.requestAnimationFrame(coverRoting);
-                };
-                coverRoting();
+                //let st = new Date();
+                //let coverRoting = function(){
+                //    if(new Date() - st >= 1000/40 && that.playing){
+                //        st = new Date();
+                //        that.rotateAngle >= 360 ? that.rotateAngle = 0.5 : that.rotateAngle += 0.5;
+                //    }
+                //    that.rotation = window.requestAnimationFrame(coverRoting);
+                //};
+                //coverRoting();
             },false);
             that.player.addEventListener('ended',function(){
                 that.lyricIndex = 0;
