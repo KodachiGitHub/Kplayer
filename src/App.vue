@@ -155,7 +155,7 @@
         position: absolute;
         top:0;
         bottom:0;
-        background-color: hsla(0, 0%, 90%, 1);
+        background-color: hsla(0, 0%, 92%, 1);
         z-index: 100;
         overflow: scroll;
     }
