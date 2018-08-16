@@ -25,6 +25,10 @@ export default {
     playlistHighQuality(){
         return axios.get(neteaseBaseUrl + '/top/playlist/highquality?limit=30')
     },
+    //网易云音乐歌单详情
+    playlistDetail(id){
+        return axios.get(neteaseBaseUrl + `/playlist/detail?id=${id}`)
+    },
     getSongDetail(mid){
         return apiFactory(API.song_detail)(mid)
     },

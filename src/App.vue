@@ -19,10 +19,7 @@
         <player></player>
         <user-panel :panelShow="panelShow" v-show="panelShow" v-on:wrapClick="closePanel"></user-panel>
         <transition name="page-fade">
-            <keep-alive v-if="$route.meta.keepAlive">
-                <router-view class="pages"></router-view>
-            </keep-alive>
-            <router-view v-if="!$route.meta.keepAlive" class="pages"></router-view>
+            <router-view class="pages"></router-view>
         </transition>
     </div>
 </template>
