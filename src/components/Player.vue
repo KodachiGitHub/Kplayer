@@ -243,11 +243,6 @@
                 that.duration = player.duration;
             },false);
 
-            function getTime(timeStr){
-                let arr = timeStr.split(':');
-                return parseInt(arr[0]) * 60 + parseInt(arr[1]);
-            }
-
             //触发播放事件时更新进度，封面旋转角度等数据
             that.player.addEventListener('play',function(e){
                 let player = that.player;
@@ -262,23 +257,23 @@
                     let preTime = that.currentTime;
                     that.currentTime = player.currentTime;
 
-                    //if(that.lyric !== null){
-                    //    /*滚动歌词*/
-                    //    let height = 0;
-                    //    if(preTime > that.currentTime){
-                    //        // 修复单曲循环，播放结束后歌词显示位置出错的问题
-                    //        that.lyricIndex = 0;
-                    //        that.scrollHeightFix = 0;
-                    //    }
-                    //    if(that.lyric[that.lyricIndex + 1] && getTime(that.lyric[that.lyricIndex + 1].time) <= that.currentTime){
-                    //        that.lyricIndex += 1;
-                    //        if(document.querySelector('#lyricFix')){
-                    //            that.scrollHeightFix += document.querySelector('#lyricFix').offsetHeight - 35;
-                    //        }
-                    //        height = parseInt(that.initScrollHeight- 35 * that.lyricIndex - that.scrollHeightFix);
-                    //        that.lyricScroll =  'transition: -webkit-transform 0.1s ease-out;transform:translate3d(0,'+ height +'px,0)';
-                    //    }
-                    //}
+                    if(that.lyric !== null){
+                        /*滚动歌词*/
+                        let height = 0;
+                        if(preTime > that.currentTime){
+                            // 修复单曲循环，播放结束后歌词显示位置出错的问题
+                            that.lyricIndex = 0;
+                            that.scrollHeightFix = 0;
+                        }
+                        if(that.lyric[that.lyricIndex + 1] && that.lyric[that.lyricIndex + 1].time <= that.currentTime){
+                            that.lyricIndex += 1;
+                            if(document.querySelector('#lyricFix')){
+                                that.scrollHeightFix += document.querySelector('#lyricFix').offsetHeight - 35;
+                            }
+                            height = parseInt(that.initScrollHeight- 35 * that.lyricIndex - that.scrollHeightFix);
+                            that.lyricScroll =  'transition: -webkit-transform 0.1s ease-out;transform:translate3d(0,'+ height +'px,0)';
+                        }
+                    }
                 },500);
             },false);
             that.player.addEventListener('ended',function(){
@@ -496,30 +491,45 @@
                     });
 
                     that.lyric = null;
-                    /*that.$api.getLyric(newValue.mid)
-                        .then(response => {
-                            /!*let lyric = _utf8_decode(atob(response.body.lyric)).split('\n');
-                            if(lyric[0].indexOf('[0') !== 0){
-                                lyric.splice(0,5);
-                            }
-                            let obj = [];
-                            for(let i = 0;i< lyric.length;i++){
-                                if(lyric[i].slice(10,lyric[i].length).toString().trim() !== ''){
-                                    obj.push ({
-                                        time:lyric[i].slice(1,9),
-                                        text:lyric[i].slice(10,lyric[i].length).toString()
+                    that.$api.lyric(newValue.id)
+                        .then(res => {
+                            if(res.data.code === 200){
+                                if(res.data.nolyric){
+                                    // 纯音乐
+                                    that.lyric = [{
+                                        time:0,
+                                        text:'纯音乐，请欣赏'
+                                    }];
+                                }else{
+                                    let lyricArr = res.data.lrc.lyric.split('\n');
+                                    let lyric = [];
+                                    lyricArr.forEach((item) => {
+                                        let time = item.slice(1,item.indexOf(']'));
+                                        let text = item.slice(item.indexOf(']') + 1,item.length);
+
+                                        let millisecond = parseInt(time.split('.')[1] || 0);
+                                        let timeStr = time.split('.')[0];
+                                        let minute = parseInt(timeStr.split(':')[0]);
+                                        let second = parseInt(timeStr.split(':')[1]);
+
+                                        time = minute * 60 + second + millisecond / 1000;
+                                        lyric.push({
+                                            time,
+                                            text
+                                        });
                                     });
+                                    that.lyric = lyric;
                                 }
                             }
-                            that.lyric = Array.from(obj);
-                            that.lyricIndex = 0;
-                            that.scrollHeightFix = 0;
-                            that.$nextTick(function(){
-                                that.lyricScroll = 'transition: -webkit-transform 0.1s ease-out;transform:translate3d(0,'+ that.initScrollHeight +'px,0)';
-                            });*!/
+                            //that.lyric = Array.from(obj);
+                            //that.lyricIndex = 0;
+                            //that.scrollHeightFix = 0;
+                            //that.$nextTick(function(){
+                            //    that.lyricScroll = 'transition: -webkit-transform 0.1s ease-out;transform:translate3d(0,'+ that.initScrollHeight +'px,0)';
+                            //});
                         }, response => {
                             // error callback
-                        });*/
+                        });
 
                 }
             },
