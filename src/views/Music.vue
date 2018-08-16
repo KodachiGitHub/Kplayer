@@ -25,7 +25,6 @@
 
 <script>
     import Swiper from './../swiper.js'
-    import {mapMutations, mapState, mapGetters} from 'vuex'
 
     export default {
         data (){
@@ -74,9 +73,6 @@
                 this.$router.push({name: 'dissList', params: {id: id}})
             }
         },
-        computed:{
-            ...mapState(['musicList','playing','action','index'])
-        }
     };
 </script>
 
