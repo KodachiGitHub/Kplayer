@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import axios from 'axios'
 
 import API from './config/api'
 
@@ -13,7 +14,17 @@ function apiFactory(api) {
     )
 }
 
+const neteaseBaseUrl = 'http://localhost:3000';
+
 export default {
+    //网易云音乐banner轮播图
+    banner(){
+        return axios.get(neteaseBaseUrl + '/banner')
+    },
+    //网易云音乐精品歌单
+    playlistHighQuality(){
+        return axios.get(neteaseBaseUrl + '/top/playlist/highquality?limit=30')
+    },
     getSongDetail(mid){
         return apiFactory(API.song_detail)(mid)
     },

@@ -5,18 +5,18 @@
         </div>
         <div class="music-list" ref="music-list" v-else>
             <div class="swiper-header">
-                <div class="swiper-wrapper" v-if="data !== null">
-                    <div  v-for="item in data.focus" class="swiper-slide">
-                        <img :src="item.pic" :alt="item.title">
+                <div class="swiper-wrapper" v-if="banners">
+                    <div  v-for="banner in banners" class="swiper-slide">
+                        <img :src="banner.picUrl">
                     </div>
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
             <div class="label">热门歌单</div>
-            <div class="row hot-diss" v-if="data !== null">
-                <div class="col-33" v-for="item in data.hotdiss.list" @click="showList(item.dissid)">
-                    <div class="img-box"><img :src="item.imgurl" alt=""></div>
-                    <p :title="item.dissname" class="diss-name">{{ item.dissname }}</p>
+            <div class="row hot-diss" v-if="hotPlaylist && hotPlaylist.length > 0">
+                <div class="col-33" v-for="item in hotPlaylist" @click="showList(item.id)">
+                    <div class="img-box"><img :src="item.coverImgUrl" alt=""></div>
+                    <p :title="item.name" class="diss-name">{{ item.name }}</p>
                 </div>
             </div>
         </div>
@@ -30,33 +30,47 @@
     export default {
         data (){
             return {
-                data:null,
-                loading:true,
+                banners: null,
+                hotPlaylist: null,
+                loading: true,
             }
         },
-        created: function () {
+        created() {
             let that = this;
-            that.loading = true;
-            that.$api.getRecommands({})
-                .then(response => {
-                    that.loading = false;
-                    that.data = response.body.data;
-                    that.$nextTick(function(){
-                        let mySwiper = new Swiper('.swiper-header', {
-                            autoplay: 2000,//可选选项，自动滑动
-                            pagination : '.swiper-pagination',
-                        });
-                    })
-                }, response => {
-                    that.loading = false;
-                });
-
-        },
-        mounted:function(){
-
+            that.getBanner();
+            that.getPlayList();
         },
         methods:{
-            showList: function (id) {
+            getBanner(){
+                let that = this;
+                that.$api.banner()
+                    .then(res => {
+                        if(res.data.code === 200){
+                            that.banners = res.data.banners;
+                        }else{
+                            that.banners = [];
+                        }
+                        that.$nextTick(function(){
+                            let mySwiper = new Swiper('.swiper-header', {
+                                autoplay: 2000,//可选选项，自动滑动
+                                pagination : '.swiper-pagination',
+                            });
+                        });
+                    })
+            },
+            //获取精品歌单
+            getPlayList(){
+                let that = this;
+                that.loading = true;
+                that.$api.playlistHighQuality()
+                    .then(res => {
+                        that.loading = false;
+                        if(res.data.code === 200){
+                            that.hotPlaylist = res.data.playlists;
+                        }
+                    });
+            },
+            showList(id){
                 this.$router.push({name: 'dissList', params: {id: id}})
             }
         },
