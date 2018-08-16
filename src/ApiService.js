@@ -29,6 +29,10 @@ export default {
     playlistDetail(id){
         return axios.get(neteaseBaseUrl + `/playlist/detail?id=${id}`)
     },
+    //网易云，歌词接口
+    lyric(id){
+        return axios.get(neteaseBaseUrl + `/lyric?id=${id}`)
+    },
     getSongDetail(mid){
         return apiFactory(API.song_detail)(mid)
     },
