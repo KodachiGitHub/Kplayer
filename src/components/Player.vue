@@ -274,7 +274,7 @@
                             that.lyricScroll =  'transition: -webkit-transform 0.1s ease-out;transform:translate3d(0,'+ height +'px,0)';
                         }
                     }
-                },500);
+                },300);
             },false);
             that.player.addEventListener('ended',function(){
                 that.lyricIndex = 0;
@@ -513,12 +513,21 @@
                                         let second = parseInt(timeStr.split(':')[1]);
 
                                         time = minute * 60 + second + millisecond / 1000;
-                                        lyric.push({
-                                            time,
-                                            text
-                                        });
+                                        if(text !== ''){
+                                            lyric.push({
+                                                time,
+                                                text
+                                            });
+                                        }
                                     });
-                                    that.lyric = lyric;
+                                    if(lyric.length === 0){
+                                        that.lyric = [{
+                                            time:0,
+                                            text:'暂无歌词'
+                                        }];
+                                    }else{
+                                        that.lyric = lyric;
+                                    }
                                 }
                             }
                             //that.lyric = Array.from(obj);
