@@ -2,28 +2,29 @@
     <div id="SongList">
         <div class="flex bar-header" :style="{ backgroundColor:color }">
             <span class="iconfont icon-back" @click="goBack"></span>
-            <div class="flex-1 info" v-if="cdList !== null">
-                <p class="list-title">{{ cdList.dissname }}</p>
-                <p class="list-name">{{ cdList.nickname }}</p>
+            <div class="flex-1 info" v-if="playlist">
+                <p class="list-title">{{ playlist.name }}</p>
+                <p class="list-name">{{ playlist.creator.nickname }}</p>
             </div>
             <span></span>
         </div>
-        <div class="container" v-if="cdList !== null">
+        <div class="container" v-if="playlist">
             <div class="list-info"  :style="{ backgroundColor:color }" style="transition: background 1s">
-                <img :src="cdList.logo" alt="" class="albumPic">
+                <img :src="playlist.coverImgUrl" alt="" class="albumPic">
+                <p class="short-text">{{ playlist.description }}</p>
             </div>
             <div class="loading-box" v-if="loading">
                 <svg viewBox="25 25 50 50" class="circular"><circle cx="50" cy="50" r="20" fill="none" class="path"></circle></svg>
             </div>
             <div class="list-content" v-else>
                 <div class="flex list-header">
-                    <div @click="playList(-1)"><span class="iconfont icon-play"></span>播放全部 ({{ cdList.songlist.length }})</div>
+                    <div @click="playList(-1)"><span class="iconfont icon-play"></span>播放全部 ({{ playlist.tracks.length }})</div>
                 </div>
-                <div class="flex song-list" v-for="(song,index) in cdList.songlist" @click="playList(index)">
+                <div class="flex song-list" v-for="(music,index) in playlist.tracks" @click="playList(index)">
                     <div class="list-index">{{ index + 1 }}</div>
                     <div class="flex-1 music-info">
-                        <p class="music-name">{{ song.songname }}</p>
-                        <p class="music-singer">{{ song.singer[0].name }}</p>
+                        <p class="music-name">{{ music.name }}</p>
+                        <p class="music-singer"><span v-for="singer in music.ar">{{ singer.name }} </span></p>
                     </div>
                 </div>
             </div>
@@ -37,87 +38,52 @@
     export default {
         data (){
             return {
-                listId:this.$route.params.id,
-                cdList:null,
-                loading:true,
+                listId: this.$route.params.id,
+                playlist: null,
+                loading: true,
+                color: '#3c3f41'
             }
         },
         created:function(){
             let that = this;
-            that.loading = true;
-
-            that.$api.getCdList(that.listId)
-                .then(response => {
-                    that.loading = false;
-                    console.log(response.body);
-                    let list = response.body;
-                    if(list.cdlist.length > 0){
-                        that.cdList = list.cdlist[0];
-                    }
-
-                }, response => {
-                    that.loading = false;
-                    // error callback
-                });
+            that.getListDetail();
         },
         computed:{
-            musicList:function(){
+            musicList(){
                 let that = this;
-                let list = [];
-                if(that.cdList.songlist){
-                    for(let i = 0; i < that.cdList.songlist.length; i ++){
-                        let data = that.cdList.songlist[i];
-                        list.push({
-                            name:data.songname || '',
-                            author:data.singer[0].name,
-                            cover:'https://y.gtimg.cn/music/photo_new/T002R500x500M000' + data.albummid + '.jpg',
-                            current:false,
-                            id:data.songid,
-                            mid:data.songmid,
-                            albumname:data.albumname,
-                            albummid:data.albummid,
-                            albumid:data.albumid,
-                            singerid:data.singer[0].id,
-                            singermid:data.singer[0].mid,
-                        });
-                    }
-                    return list;
-                }
-            },
-            color: function () {
-                if (this.cdList !== null) {
-                    let fixed = '00000' + this.cdList.uin.toString(16);
-                    return '#' + fixed.substr(fixed.length - 6)
-                } else {
-                    return '#3c3f41'
+                if(that.playList){
+                    return that.playlist.tracks;
                 }
             },
         },
         methods:{
-            goBack:function(){
-                this.$router.go(-1);
-            },
-            getAlbum:function(id){
-                this.$api.getAlbum(id)
-                    .then(response => {
-                        console.log(response);
-                    }, response => {
-                        // error callback
+            getListDetail(){
+                //获取歌单详情
+                let that = this;
+                that.loading = true;
+                that.$api.playlistDetail(that.$route.params.id)
+                    .then(res => {
+                        that.loading = false;
+                        if(res.data.code === 200){
+                            that.playlist = res.data.playlist;
+                        }
                     });
             },
-            playList:function(index){
+            goBack(){
+                this.$router.go(-1);
+            },
+            playList(index){
                 let that = this;
                 if(index !== -1){
                     that.$store.commit('addAndPlay',that.musicList[index]);
                 }else{
-                    this.$store.commit('replaceList', this.musicList);
+                    that.$store.commit('replaceList',that.musicList);
                 }
 
             }
         }
     }
 </script>
-<!--https://y.gtimg.cn/music/photo_new/T002R500x500M000{{topList.songlist[index].data.albummid}}-->
 <style scoped>
     #list-index{
         width: 100%;
@@ -179,10 +145,23 @@
     .list-info{
         padding: 3rem .5rem .4rem .5rem;
         background-color: #3c3f41;
+        overflow: hidden;
     }
     .albumPic{
         width: 6rem;
         height: 6rem;
+        float: left;
+    }
+    .short-text{
+        margin: 0 0.3rem 0 6.7rem;
+        color:#fff;
+        text-align: left;
+        font-size: .6rem;
+        line-height: 1.5em;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 5;
+        overflow: hidden;
     }
 
     .list-content{

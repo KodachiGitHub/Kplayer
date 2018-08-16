@@ -2,10 +2,10 @@
     <div id="music-player">
         <!--迷你底部播放器-->
         <div class="flex player-bottom">
-            <div class="cover" @click="fullScreen"><img :src="music.cover" alt=""></div>
+            <div class="cover" @click="fullScreen"><img :src="music.al.picUrl" alt=""></div>
             <div class="flex-1 info" @click="fullScreen">
                 <p class="music-name">{{ music.name }}</p>
-                <p class="author">{{ music.author }}</p>
+                <p class="author"><span v-for="singer in music.ar">{{ singer.name }} </span></p>
             </div>
             <div class="controls">
                 <span class="iconfont icon-list" @click="openList"></span>
@@ -26,12 +26,12 @@
                         <span @click="closeFull" class="iconfont icon-back"></span>
                         <div class="flex-1 info">
                             <p class="music-name">{{ music.name }}</p>
-                            <p class="author">{{ music.author }}</p>
+                            <p class="author"><span v-for="singer in music.ar">{{ singer.name }} </span></p>
                         </div>
                         <span v-if="music.id !== -1" class="iconfont icon-operation" @click="openActionSheet"></span>
                     </div>
                     <div class="cover-big rotate" :class="{ 'animate-paused': !playing }" v-if="!showLyric">
-                        <img :src="music.cover" alt="" class="">
+                        <img :src="music.al.picUrl" alt="" class="">
                     </div>
                 </div>
                 <div class="control-box">
@@ -135,8 +135,10 @@
                 music:{
                     id:-1,
                     name:'music player',
-                    author:'Kodachi',
-                    cover:'http://onpnulig2.bkt.clouddn.com/cover.jpg?imageView2/0/w/500',
+                    ar:[],
+                    al:{
+                        picUrl:'http://onpnulig2.bkt.clouddn.com/cover.jpg?imageView2/0/w/500',
+                    },
                     src:'',
                     current:false,
                 },
@@ -165,27 +167,27 @@
             }
         },
         computed:{
-            lyricOpacity:function(){
+            lyricOpacity(){
                 if(this.showLyric){
                     return 'opacity:1'
                 }else{
                     return 'opacity:0'
                 }
             },
-            playing:function(){
+            playing(){
                 return this.$store.state.playing //当前的播放状态
             },
-            index:function(){
+            index(){
                 return this.$store.state.index
             },
-            action:function(){
+            action(){
                 return this.$store.state.action
             },
-            musicList:function(){
-                return this.$store.getters.newMusicList;
+            musicList(){
+                return this.$store.state.musicList;
             },
             //返回格式化的时间
-            formatTime:function(){
+            formatTime(){
                 let that = this;
                 if(!that.currentTime) return '00:00';
                 let time = parseInt(that.currentTime);
@@ -193,7 +195,7 @@
                 let m = parseInt(time/60);
                 return that.format([m,s]).join(':');
             },
-            formatDuration:function(){
+            formatDuration(){
                 let that = this;
                 if(!that.duration) return '00:00';
                 let time = parseInt(that.duration);
@@ -205,7 +207,7 @@
                 return this.musicList.length;
             },
             //随机排序后的播放列表，存储随机的数组下标
-            randomList:function(){
+            randomList(){
                 let that = this;
                 let random = [];
                 for(let i = 0;i < that.musicList.length;i ++){
@@ -219,7 +221,7 @@
                 that.randomIndex = random.indexOf(that.index);
                 return random;
             },
-            circleModeText:function(){
+            circleModeText(){
                 let text = {
                     list:'列表循环',
                     single:'单曲循环',
@@ -228,7 +230,7 @@
                 return text[this.circleMode];
             }
         },
-        mounted:function(){
+        mounted(){
             let that = this;
             /*计算窗口的高度*/
             that.windowHeight = document.querySelector('body').offsetHeight;
@@ -240,11 +242,6 @@
                 let player = that.player;
                 that.duration = player.duration;
             },false);
-
-            function getTime(timeStr){
-                let arr = timeStr.split(':');
-                return parseInt(arr[0]) * 60 + parseInt(arr[1]);
-            }
 
             //触发播放事件时更新进度，封面旋转角度等数据
             that.player.addEventListener('play',function(e){
@@ -268,7 +265,7 @@
                             that.lyricIndex = 0;
                             that.scrollHeightFix = 0;
                         }
-                        if(that.lyric[that.lyricIndex + 1] && getTime(that.lyric[that.lyricIndex + 1].time) <= that.currentTime){
+                        if(that.lyric[that.lyricIndex + 1] && that.lyric[that.lyricIndex + 1].time <= that.currentTime){
                             that.lyricIndex += 1;
                             if(document.querySelector('#lyricFix')){
                                 that.scrollHeightFix += document.querySelector('#lyricFix').offsetHeight - 35;
@@ -277,17 +274,7 @@
                             that.lyricScroll =  'transition: -webkit-transform 0.1s ease-out;transform:translate3d(0,'+ height +'px,0)';
                         }
                     }
-
-                },500);
-                //let st = new Date();
-                //let coverRoting = function(){
-                //    if(new Date() - st >= 1000/40 && that.playing){
-                //        st = new Date();
-                //        that.rotateAngle >= 360 ? that.rotateAngle = 0.5 : that.rotateAngle += 0.5;
-                //    }
-                //    that.rotation = window.requestAnimationFrame(coverRoting);
-                //};
-                //coverRoting();
+                },300);
             },false);
             that.player.addEventListener('ended',function(){
                 that.lyricIndex = 0;
@@ -300,7 +287,7 @@
                 that.index = 0;
             }
 
-            this.initCanvas();
+            that.initCanvas();
 
         },
         methods:{
@@ -322,7 +309,7 @@
 
                 let img = document.createElement('img');
                 img.crossOrigin = '';
-                img.src = that.music.cover;
+                img.src = that.music.al.picUrl;
 
                 img.onload = function(){
                     ctx.clearRect( 0, 0, canvas.width, canvas.height );
@@ -330,12 +317,12 @@
                     stackBlur.stackBlurCanvasRGB('player-background',0,0,canvas.width,canvas.height,150);
                 };
             },
-            play:function(){
+            play(){
                 if(this.musicList.length > 0){
                     this.$store.commit('changePlayState',!this.playing);
                 }
             },
-            initPlayer:function(){
+            initPlayer(){
                 let that = this;
                 clearInterval(that.interval);
                 window.cancelAnimationFrame(that.rotation);
@@ -351,7 +338,7 @@
                     current:false,
                 };
             },
-            format:function(num){
+            format(num){
                 for(let i = 0;i < num.length; i ++){
                     if(num[i] < 10){
                         num[i] = '0' + num[i];
@@ -361,7 +348,7 @@
             },
 
             //切换播放模式
-            modeChange:function(){
+            modeChange(){
                 let that = this;
                 let modeList = ['list','single','random'];
                 let index = modeList.indexOf(that.circleMode);
@@ -372,7 +359,7 @@
             //几种常见的列表播放模式，单曲循环，列表循环，随机播放
             //随机播放需要考虑到音乐重复播放的问题
             //manual 是否是由用户手动点击下一曲。手动：下一曲 自动切换：按照循环模式切换
-            playNext:function(){
+            playNext(){
                 let that = this;
                 that.player.currentTime = 0;
                 that.progress = 0;
@@ -396,7 +383,7 @@
                 });
             },
             //上一首
-            playPre:function(){
+            playPre(){
                 let that = this;
                 that.currentTime = 0;
                 that.progress = 0;
@@ -415,7 +402,7 @@
                 }
             },
             //点击播放列表中的歌曲，切换歌曲
-            changeMusic:function(index){
+            changeMusic(index){
                 let that = this;
                 if(index !== that.index){
                     that.currentTime = 0;
@@ -426,7 +413,7 @@
                 }
             },
             //从播放列表中删除一首歌
-            deleteMusic:function(index){
+            deleteMusic(index){
                 let that = this;
                 if(index === that.index){
                     this.$store.commit('deleteMusic', index);
@@ -446,104 +433,116 @@
                     this.$store.commit('deleteMusic', index);
                 }
             },
-            clearList:function(){
+            clearList(){
                 this.$store.commit('clearList');
             },
-            openList:function(){
+            openList(){
                 this.showList = true;
             },
-            closeList:function(){
+            closeList(){
                 this.showList = false;
             },
-            fullScreen:function(){
+            fullScreen(){
                 this.isFullScreen = true;
             },
-            closeFull:function(){
+            closeFull(){
                 this.isFullScreen = false;
             },
-            toggleLyric:function () {
+            toggleLyric () {
                 this.showLyric = !this.showLyric;
             },
-            openActionSheet:function(){
+            openActionSheet(){
                 this.showActionSheet = true;
             },
-            closeActionSheet:function(){
+            closeActionSheet(){
                 this.showActionSheet = false;
             }
         },
         watch:{
-            index:function(to,from){
+            index(to,from){
                 this.music = this.musicList[to];
             },
             //检测playing值得变化，调用audio的播放，暂停功能
-            playing:function(newValue,oldValue){
+            playing(newValue,oldValue){
                 let that = this;
                 if(newValue){
                     if(!that.music.id){
                         that.music = that.musicList[that.index];
                     }
-                    this.player.play();
+                    that.$nextTick(() => {
+                        that.player.src = `http://music.163.com/song/media/outer/url?id=${that.music.id}.mp3`;
+                        that.player.play();
+                        console.log(that.player.src);
+                    });
                 }else{
-                    this.player.pause();
+                    that.player.pause();
                 }
             },
             // music指向列表中的一首歌，指向发生变化时更改audio.src属性，同时获取歌词等
-            music:function(newValue,oldValue){
+            music(newValue,oldValue){
                 let that = this;
                 if(newValue.id !== oldValue.id){
                     that.drawBackground();
 
-                    that.$api.music_vKey(newValue.mid)
-                        .then(res => {
-                            // console.log(res.body);
-                            let musicData = res.body.data.items[0];
-                            let musicUrl = `http://dl.stream.qqmusic.qq.com/${musicData.filename}?vkey=${musicData.vkey}&guid=3655047200&fromtag=66`;
-                            that.player.src = '';
-                            that.player.src = musicUrl;
-
-                            if(that.playing){
-                                setTimeout(function(){
-                                    that.player.play();
-                                },200);
-                            }
-                        });
+                    that.$nextTick(() => {
+                        that.player.src = `http://music.163.com/song/media/outer/url?id=${newValue.id}.mp3`;
+                        that.player.play();
+                        console.log(that.player.src);
+                    });
 
                     that.lyric = null;
-                    that.$api.getLyric(newValue.mid)
-                        .then(response => {
-                            let lyric = _utf8_decode(atob(response.body.lyric)).split('\n');
-                            if(lyric[0].indexOf('[0') !== 0){
-                                lyric.splice(0,5);
-                            }
-                            let obj = [];
-                            for(let i = 0;i< lyric.length;i++){
-                                if(lyric[i].slice(10,lyric[i].length).toString().trim() !== ''){
-                                    obj.push ({
-                                        time:lyric[i].slice(1,9),
-                                        text:lyric[i].slice(10,lyric[i].length).toString()
+                    that.$api.lyric(newValue.id)
+                        .then(res => {
+                            if(res.data.code === 200){
+                                if(res.data.nolyric){
+                                    // 纯音乐
+                                    that.lyric = [{
+                                        time:0,
+                                        text:'纯音乐，请欣赏'
+                                    }];
+                                }else{
+                                    let lyricArr = res.data.lrc.lyric.split('\n');
+                                    let lyric = [];
+                                    lyricArr.forEach((item) => {
+                                        let time = item.slice(1,item.indexOf(']'));
+                                        let text = item.slice(item.indexOf(']') + 1,item.length);
+
+                                        let millisecond = parseInt(time.split('.')[1] || 0);
+                                        let timeStr = time.split('.')[0];
+                                        let minute = parseInt(timeStr.split(':')[0]);
+                                        let second = parseInt(timeStr.split(':')[1]);
+
+                                        time = minute * 60 + second + millisecond / 1000;
+                                        if(text !== ''){
+                                            lyric.push({
+                                                time,
+                                                text
+                                            });
+                                        }
                                     });
+                                    if(lyric.length === 0){
+                                        that.lyric = [{
+                                            time:0,
+                                            text:'暂无歌词'
+                                        }];
+                                    }else{
+                                        that.lyric = lyric;
+                                    }
                                 }
                             }
-                            that.lyric = Array.from(obj);
-                            that.lyricIndex = 0;
-                            that.scrollHeightFix = 0;
-                            that.$nextTick(function(){
-                                that.lyricScroll = 'transition: -webkit-transform 0.1s ease-out;transform:translate3d(0,'+ that.initScrollHeight +'px,0)';
-                            });
+                            //that.lyric = Array.from(obj);
+                            //that.lyricIndex = 0;
+                            //that.scrollHeightFix = 0;
+                            //that.$nextTick(function(){
+                            //    that.lyricScroll = 'transition: -webkit-transform 0.1s ease-out;transform:translate3d(0,'+ that.initScrollHeight +'px,0)';
+                            //});
                         }, response => {
                             // error callback
                         });
 
-                    //播放器背景
-                    that.$nextTick(() => {
-                        let playerBackgroundImage = document.querySelector('#player-background');
-                        playerBackgroundImage.onload = function(){
-                            // console.log(playerBackgroundImage.src,playerBackgroundImage.naturalWidth,playerBackgroundImage.naturalHeight);
-                        };
-                    });
                 }
             },
-            action:function(to,from){
+            action(to,from){
                 let that = this;
                 if(to === 'playList' && that.musicList.length > 0){
                     that.player.currentTime = 0;
