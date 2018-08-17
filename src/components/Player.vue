@@ -530,16 +530,12 @@
                                     }
                                 }
                             }
-                            //that.lyric = Array.from(obj);
-                            //that.lyricIndex = 0;
-                            //that.scrollHeightFix = 0;
-                            //that.$nextTick(function(){
-                            //    that.lyricScroll = 'transition: -webkit-transform 0.1s ease-out;transform:translate3d(0,'+ that.initScrollHeight +'px,0)';
-                            //});
-                        }, response => {
-                            // error callback
+                            that.lyricIndex = 0;
+                            that.scrollHeightFix = 0;
+                            that.$nextTick(function(){
+                                that.lyricScroll = 'transition: -webkit-transform 0.1s ease-out;transform:translate3d(0,'+ that.initScrollHeight +'px,0)';
+                            });
                         });
-
                 }
             },
             action(to,from){
