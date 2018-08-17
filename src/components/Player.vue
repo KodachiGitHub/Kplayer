@@ -470,9 +470,9 @@
                         that.music = that.musicList[that.index];
                     }
                     that.$nextTick(() => {
-                        that.player.src = `http://music.163.com/song/media/outer/url?id=${that.music.id}.mp3`;
+                        //that.player.src = `http://music.163.com/song/media/outer/url?id=${that.music.id}.mp3`;
                         that.player.play();
-                        console.log(that.player.src);
+                        //console.log(that.player.src);
                     });
                 }else{
                     that.player.pause();
@@ -484,11 +484,17 @@
                 if(newValue.id !== oldValue.id){
                     that.drawBackground();
 
-                    that.$nextTick(() => {
-                        that.player.src = `http://music.163.com/song/media/outer/url?id=${newValue.id}.mp3`;
-                        that.player.play();
-                        console.log(that.player.src);
-                    });
+                    that.$api.musicUrl(newValue.id)
+                        .then(res => {
+                            if(res.data.code === 200 && res.data.data && res.data.data.length > 0){
+                                that.$nextTick(() => {
+                                    that.player.src = res.data.data[0].url;
+                                    that.player.play();
+                                    console.log(that.player.src);
+                                });
+                            }
+                        });
+
 
                     that.lyric = null;
                     that.$api.lyric(newValue.id)
