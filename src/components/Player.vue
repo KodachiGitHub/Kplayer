@@ -313,7 +313,7 @@
 
                 img.onload = function(){
                     ctx.clearRect( 0, 0, canvas.width, canvas.height );
-                    ctx.drawImage(img,(500 - ratio * 500)/2,0,ratio * 500,500,0,0,canvas.width,canvas.height);
+                    ctx.drawImage(img,0,0,canvas.width,canvas.height);
                     stackBlur.stackBlurCanvasRGB('player-background',0,0,canvas.width,canvas.height,150);
                 };
             },
@@ -513,12 +513,10 @@
                                         let second = parseInt(timeStr.split(':')[1]);
 
                                         time = minute * 60 + second + millisecond / 1000;
-                                        if(text !== ''){
-                                            lyric.push({
-                                                time,
-                                                text
-                                            });
-                                        }
+                                        lyric.push({
+                                            time,
+                                            text
+                                        });
                                     });
                                     if(lyric.length === 0){
                                         that.lyric = [{
