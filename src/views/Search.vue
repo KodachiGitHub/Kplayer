@@ -48,15 +48,10 @@
                 input:null,
             }
         },
-        created:function(){
-            this.$api.getHotKey()
-                .then(response => {
-                    // console.log(response.body);
-                },response => {
-                    //error callback
-                });
+        created(){
+
         },
-        mounted:function(){
+        mounted(){
             let that = this;
             that.input = document.querySelector('.bar-header>input');
             that.input.focus();
@@ -69,16 +64,20 @@
 
         },
         methods:{
-            goBack:function(){
+            goBack(){
                 this.$router.go(-1);
             },
-            search:function(){
+            search(){
                 let that = this;
                 if(that.input !== null){
                     that.input.blur();
                 }
                 that.showRec = false;
                 if(that.key !== ''){
+                    that.$api.neteaseSearch(that.key)
+                        .then(res => {
+                            console.log(res);
+                        });
                     that.$api.searchSongs(that.key)
                         .then(response => {
                             // console.log(response.body);
@@ -88,7 +87,7 @@
                         });
                 }
             },
-            playMusic:function(index){
+            playMusic(index){
                 let that = this;
                 let currentMusic = that.result[index];
                 let music = {
@@ -106,7 +105,7 @@
                 };
                 that.$store.commit('addAndPlay',music);
             },
-            playRec:function(song){
+            playRec(song){
                 let that = this;
                 that.showRec = false;
                 that.$api.getSongDetail(song.mid)
@@ -131,16 +130,16 @@
                         // error callback
                     });
             },
-            closeRec:function(){
+            closeRec(){
                 this.showRec = false;
             },
-            getAlbum:function(song){
+            getAlbum(song){
 
             },
-            toAlbum:function(id){
+            toAlbum(id){
                 this.$router.push({name: 'album', params: {id: id}})
             },
-            toSinger:function(id){
+            toSinger(id){
                 this.$router.push({name: 'singer', params: {id: id}})
             },
         },

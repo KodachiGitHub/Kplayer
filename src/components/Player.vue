@@ -13,7 +13,7 @@
                 <span class="iconfont icon-next" @click="playNext(true)"></span>
             </div>
             <div class="progress" :style="{ width : progress + '%'}"></div>
-            <audio id="player" :src="music.src" :loop="circleMode === 'single'"></audio>
+            <audio id="player" :src="src" :loop="circleMode === 'single'"></audio>
         </div>
         <!--迷你底部播放器结束-->
 
@@ -163,7 +163,8 @@
                 showActionSheet:false,
                 playerBackground:null,
                 windowRatio:0,
-                rotateClass:''
+                rotateClass:'',
+                src:''
             }
         },
         computed:{
@@ -470,9 +471,7 @@
                         that.music = that.musicList[that.index];
                     }
                     that.$nextTick(() => {
-                        //that.player.src = `http://music.163.com/song/media/outer/url?id=${that.music.id}.mp3`;
                         that.player.play();
-                        //console.log(that.player.src);
                     });
                 }else{
                     that.player.pause();
@@ -487,10 +486,9 @@
                     that.$api.musicUrl(newValue.id)
                         .then(res => {
                             if(res.data.code === 200 && res.data.data && res.data.data.length > 0){
+                                that.src = res.data.data[0].url;
                                 that.$nextTick(() => {
-                                    that.player.src = res.data.data[0].url;
                                     that.player.play();
-                                    console.log(that.player.src);
                                 });
                             }
                         });

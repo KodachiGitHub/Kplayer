@@ -37,6 +37,10 @@ export default {
     musicUrl(id){
         return axios.get(neteaseBaseUrl + `/music/url?id=${id}`)
     },
+    //网易云，搜索接口
+    neteaseSearch(key){
+        return axios.get(neteaseBaseUrl + `/search?keywords=${key}&limit=50`)
+    },
     getSongDetail(mid){
         return apiFactory(API.song_detail)(mid)
     },
