@@ -477,12 +477,11 @@
                     that.player.pause();
                 }
             },
-            // music指向列表中的一首歌，指向发生变化时更改audio.src属性，同时获取歌词等
+            // music指向列表中的一首歌，指向发生变化时更改audio.src属性，同时获取歌词封面等
             music(newValue,oldValue){
                 let that = this;
                 if(newValue.id !== oldValue.id){
-                    that.drawBackground();
-
+                    //获取音乐播放链接，高音质
                     that.$api.musicUrl(newValue.id)
                         .then(res => {
                             if(res.data.code === 200 && res.data.data && res.data.data.length > 0){
@@ -493,7 +492,20 @@
                             }
                         });
 
+                    //获取歌词专辑封面
+                    if(!newValue.al.picUrl || newValue.al.picUrl === ''){
+                        that.$api.neteaseAlbum(newValue.al.id)
+                            .then(res => {
+                                if(res.data.code === 200){
+                                    newValue.al.picUrl = res.data.album.picUrl;
+                                    that.drawBackground();
+                                }
+                            });
+                    }else{
+                        that.drawBackground();
+                    }
 
+                    //获取歌词
                     that.lyric = null;
                     that.$api.lyric(newValue.id)
                         .then(res => {

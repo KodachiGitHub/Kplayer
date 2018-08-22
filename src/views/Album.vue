@@ -1,7 +1,7 @@
 <template>
     <div id="SongList">
         <div>
-            <div class="flex bar-header" :style="{ backgroundColor:color }">
+            <div class="flex bar-header">
                 <span class="iconfont icon-back" @click="goBack"></span>
                 <div class="flex-1 info" v-if="album !== null">
                     <p class="list-title">专辑</p>
@@ -9,23 +9,23 @@
                 </div>
             </div>
             <div class="container" v-if="album !== null">
-                <div class="flex list-info"  :style="{ backgroundColor:color }" style="transition: background 1s">
-                    <img :src="cover" alt="" class="albumPic">
+                <div class="flex list-info" style="transition: background 1s">
+                    <img :src="album.picUrl" alt="" class="albumPic">
                     <div>
                         <p class="album-name">{{ album.name }}</p>
-                        <p>发行时间：{{ album.aDate }}</p>
-                        <p>歌手：{{ album.singername }}</p>
+                        <p>发行时间：{{ $t.timeFormat(album.publishTime,'yyyy-MM-dd') }}</p>
+                        <p>歌手：{{ album.artists[0].name }}</p>
                     </div>
                 </div>
-                <div class="list-content">
+                <div class="list-content" v-if="songs">
                     <div class="flex list-header">
-                        <div @click="playList(-1)"><span class="iconfont icon-play"></span>播放全部 ({{ album.list.length }})</div>
+                        <div @click="playList(-1)"><span class="iconfont icon-play"></span>播放全部 ({{ songs.length }})</div>
                     </div>
-                    <div class="flex song-list" v-for="(song,index) in album.list" @click="playList(index)">
+                    <div class="flex song-list" v-for="(song,index) in songs" @click="playList(index)">
                         <div class="list-index">{{ index + 1 }}</div>
                         <div class="flex-1 music-info">
-                            <p class="music-name">{{ song.songname }}</p>
-                            <p class="music-singer">{{ song.singer[0].name }}</p>
+                            <p class="music-name">{{ song.name }}</p>
+                            <p class="music-singer"><span v-for="singer in song.ar">{{ singer.name }} </span></p>
                         </div>
                     </div>
                 </div>
@@ -39,65 +39,35 @@
     export default {
         data (){
             return {
-                albumid:this.$route.params.id,
+                id:this.$route.params.id,
                 album:null,
+                songs:null,
             }
         },
-        created:function(){
+        created(){
             let that = this;
-            that.$api.getAlbum(that.albumid).then(response => {
-                console.log(response.body.data);
-                that.album = response.body.data;
-            }, response => {
-                // error callback
-            });
-        },
-        computed:{
-            cover:function(){
-                return 'https://y.gtimg.cn/music/photo_new/T002R500x500M000' + this.album.mid + '.jpg';
-            },
-            musicList:function(){
-                let that = this;
-                let list = [];
-                if(that.album.list){
-                    for(let i = 0; i < that.album.list.length; i ++){
-                        let data = that.album.list[i];
-                        list.push({
-                            name:data.songname,
-                            author:data.singer[0].name,
-                            cover:'https://y.gtimg.cn/music/photo_new/T002R500x500M000' + data.albummid + '.jpg',
-                            current:false,
-                            id:data.songid,
-                            mid:data.songmid,
-                            albumname:data.albumname,
-                            albummid:data.albummid,
-                            albumid:data.albumid,
-                            singerid:data.singer[0].id,
-                            singermid:data.singer[0].mid
-                        });
-                    }
-                    return list;
-                }
-            },
-            color: function () {
-                if (this.album !== null) {
-                    let fixed = '00000' + this.album.color.toString(16);
-                    return '#' + fixed.substr(fixed.length - 6)
-                } else {
-                    return '#3c3f41'
-                }
-            },
+            that.getData();
         },
         methods:{
-            goBack:function(){
+            getData(){
+                let that = this;
+                that.$api.album(that.id)
+                    .then(res => {
+                        if(res.data.code === 200){
+                            that.album = res.data.album;
+                            that.songs = res.data.songs;
+                        }
+                    });
+            },
+            goBack(){
                 this.$router.go(-1);
             },
-            playList:function(index){
+            playList(index){
                 let that = this;
                 if(index !== -1){
-                    that.$store.commit('addAndPlay',that.musicList[index]);
+                    that.$store.commit('addAndPlay',that.songs[index]);
                 }else{
-                    this.$store.commit('replaceList', this.musicList);
+                    this.$store.commit('replaceList', that.songs);
                 }
             }
         }
@@ -163,6 +133,7 @@
     .list-info{
         padding: 3rem .5rem .4rem .5rem;
         background-color: #3c3f41;
+        align-items: flex-start;
     }
     .list-info p{
         color:#fff;
@@ -186,6 +157,7 @@
 
     .list-content{
         width: 100%;
+        background-color: #fff;
     }
     .list-header{
         padding-left: .5rem;
