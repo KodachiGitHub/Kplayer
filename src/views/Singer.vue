@@ -4,12 +4,12 @@
             <div class="flex bar-header">
                 <span class="iconfont icon-back" @click="goBack"></span>
                 <div class="flex-1 info" v-if="singer !== null">
-                    <p class="list-title">{{ singer.singer_name }}</p>
+                    <p class="list-title">{{ singer.name }}</p>
                     <!--<p class="list-name">{{ singer.singername }}</p>-->
                 </div>
                 <span></span>
             </div>
-            <div class="container" v-if="songs !== null">
+            <div class="container" v-if="hotSongs !== null">
                 <div class="list-info"  :style="background">
                 </div>
                 <div class="flex tabs" :class="currentTab">
@@ -22,24 +22,24 @@
                     <transition :name="transitionName">
                         <div v-show="currentTab === 'music'" class="list-content">
                             <div class="flex list-header">
-                                <div @click="playList(-1)"><span class="iconfont icon-play"></span>播放全部 ({{ songs.length }})</div>
+                                <div @click="playList(-1)"><span class="iconfont icon-play"></span>播放全部 ({{ hotSongs.length }})</div>
                             </div>
-                            <div class="flex song-list" v-for="(song,index) in songs" @click="playList(index)">
+                            <div class="flex song-list" v-for="(song,index) in hotSongs" @click="playList(index)">
                                 <div class="list-index">{{ index + 1 }}</div>
                                 <div class="flex-1 music-info">
-                                    <p class="music-name">{{ song.musicData.songname }}</p>
-                                    <p class="music-singer">{{ song.musicData.singer[0].name }}</p>
+                                    <p class="music-name">{{ song.name }}</p>
+                                    <p class="music-singer"><span v-for="singer in song.al">{{ singer.name }} </span></p>
                                 </div>
                             </div>
                         </div>
                     </transition>
                     <transition :name="transitionName">
-                        <div v-show="currentTab === 'album'" class="list-content">
-                            <div class="flex song-list" v-for="(album,index) in albums" @click="toAlbum(album.albumID)">
+                        <div v-show="currentTab === 'album'" class="list-content" v-if="albums">
+                            <div class="flex song-list" v-for="(album,index) in albums" @click="toAlbum(album.id)">
                                 <div class="album-cover"><img :src="album.picUrl" alt=""></div>
                                 <div class="flex-1 music-info">
-                                    <p class="music-name">{{ album.albumName }}</p>
-                                    <p class="music-singer">{{ album.pubTime }}</p>
+                                    <p class="music-name">{{ album.name }}</p>
+                                    <p class="music-singer">{{ $t.timeFormat(album.publishTime,'yyyy-MM-dd') }} 歌曲{{album.size}}</p>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +48,7 @@
                         <div v-show="currentTab === 'info'" class="list-content">
                             <div class="singer-desc">
                                 <div class="label">歌手介绍</div>
-                                <p>{{ singer.SingerDesc }}</p>
+                                <p>{{ singer.briefDesc }}</p>
                             </div>
                         </div>
                     </transition>
@@ -64,9 +64,9 @@
     export default {
         data (){
             return {
-                singermid:this.$route.params.id,
+                id:this.$route.params.id,
                 singer:null,
-                songs:null,
+                hotSongs:null,
                 albums:null,
                 currentTab:'music',
                 transitionName:'left'
@@ -74,81 +74,52 @@
         },
         created:function(){
             let that = this;
-            //获取歌手基本信息
-            that.$api.getSingerInfo(that.singermid)
-                .then(response => {
-                    console.log();
-                    that.singer = response.body.data;
-                }, response => {
-                    // error callback
-                });
-            //获取歌手最热门的100首歌曲，按播放量排序
-            that.$api.getSingerSongs(that.singermid)
-                .then(response => {
-                    that.songs = response.body.data.list;
-                }, response => {
-                    // error callback
-                });
-            //获取歌手的专辑
-            that.$api.getSingerAlbum(that.singermid)
-                .then(response => {
-                    that.albums = response.body.data.list;
-                    for(let i = 0,len = that.albums.length; i < len; i++ ){
-                        that.albums[i].picUrl = "//y.gtimg.cn/music/photo_new/T002R300x300M000" + that.albums[i].albumMID + ".jpg"
+
+            that.$api.singerSongs(that.id)
+                .then(res => {
+                    if(res.data.code === 200){
+                        that.hotSongs = res.data.hotSongs;
+                        that.singer = res.data.artist;
                     }
-                }, response => {
-                    // error callback
+                });
+
+            //获取歌手的专辑
+            that.$api.singerAlbums(that.id)
+                .then(res => {
+                    if(res.data.code === 200){
+                        that.albums = res.data.hotAlbums;
+                    }
                 });
         },
         computed:{
-            background:function(){
-                return 'background:url("' + 'https://y.gtimg.cn/music/photo_new/T001R500x500M000' + this.singer.singer_mid + '.jpg") center center /cover no-repeat';
-            },
-            musicList:function(){
-                let that = this;
-                let list = [];
-                if(that.songs){
-                    for(let i = 0; i < that.songs.length; i ++){
-                        let data = that.songs[i].musicData;
-                        list.push({
-                            name:data.songname,
-                            author:data.singer[0].name,
-                            cover:'https://y.gtimg.cn/music/photo_new/T002R500x500M000' + data.albummid + '.jpg',
-                            current:false,
-                            id:data.songid,
-                            mid:data.songmid,
-                            albumname:data.albumname,
-                            albummid:data.albummid,
-                            albumid:data.albumid,
-                            singerid:data.singer[0].id,
-                            singermid:that.singer.singer_mid
-                        });
-                    }
-                    return list;
+            background(){
+                if(this.singer){
+                    return `background:url("${this.singer.picUrl}") center center /cover no-repeat`;
                 }
+                return '';
             },
         },
         methods:{
-            goBack:function(){
+            goBack(){
                 this.$router.go(-1);
             },
-            playList:function(index){
+            playList(index){
                 let that = this;
                 if(index !== -1){
-                    that.$store.commit('addAndPlay',that.musicList[index]);
+                    that.$store.commit('addAndPlay',that.hotSongs[index]);
                 }else{
-                    this.$store.commit('replaceList', this.musicList);
+                    this.$store.commit('replaceList',that.hotSongs);
                 }
             },
-            changeTab:function(tab){
+            changeTab(tab){
                 this.currentTab = tab;
             },
-            toAlbum:function(id){
+            toAlbum(id){
                 this.$router.push({name: 'album', params: {id: id}})
             },
         },
         watch:{
-            currentTab:function(to,from){
+            currentTab(to,from){
                 let that = this;
                 if(to === 'music' || ( to === 'album' && from === 'info' )){
                     that.transitionName = 'right';
@@ -215,7 +186,6 @@
         width: 100%;
         top:0;
         bottom:0;
-        padding-bottom: 2.45rem;
         background-color: hsla(0, 0%, 90%, 1);
     }
     .list-info{
@@ -226,6 +196,7 @@
     .list-content{
         width: 100%;
         padding-bottom: 2.45rem;
+        background-color: #fff;
     }
     .list-header{
         padding-left: .5rem;
@@ -301,6 +272,7 @@
     .tabs{
         width: 100%;
         position: relative;
+        border-bottom: 1px solid #E5E5E5;
     }
     .tabs div{
         text-align: center;

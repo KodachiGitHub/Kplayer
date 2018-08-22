@@ -5,7 +5,7 @@
             <input class="flex-1" type="text" placeholder="输入关键词搜索" v-model.trim="key" @keyup.enter="search">
             <span class="iconfont icon-search" @click="search"></span>
         </div>
-        <div class="rec-container" v-if="recommend !== null && showRec" @click="closeRec">
+        <!--<div class="rec-container" v-if="recommend !== null && showRec" @click="closeRec">
             <div class="recommend" @click.stop>
                 <div class="type-title" v-if="recommend.singer"><span class="iconfont icon-singer"></span>歌手</div>
                 <div class="rec-item" v-if="recommend.singer">
@@ -20,14 +20,14 @@
                     <div @click="toAlbum(album.id)" class="flex" v-for="album in recommend.album.itemlist"><span class="rec-name">{{ album.name }}</span><span class="singer">-{{ album.singer }}</span></div>
                 </div>
             </div>
-        </div>
+        </div>-->
         <div class="container">
             <div class="list-content" v-if="result.length !== 0">
                 <div class="flex song-list" v-for="(song,index) in result" @click="playMusic(index)">
                     <div class="list-index">{{ index + 1 }}</div>
                     <div class="flex-1 music-info">
-                        <p class="music-name">{{ song.songname }}</p>
-                        <p class="music-singer">{{ song.singer[0].name }}</p>
+                        <p class="music-name">{{ song.name }}</p>
+                        <p class="music-singer"><span v-for="singer in song.ar">{{ singer.name }} </span></p>
                     </div>
                 </div>
             </div>
@@ -36,6 +36,21 @@
 </template>
 
 <script>
+
+    let musicStruce = {
+        id:0,
+        name:'',
+        al:{
+            id:0,
+            name:'',
+            picUrl:''
+        },
+        ar:[{
+            id:0,
+            name:'',
+        }]
+    };
+
     import _ from 'lodash'
     export default {
         data (){
@@ -48,15 +63,10 @@
                 input:null,
             }
         },
-        created:function(){
-            this.$api.getHotKey()
-                .then(response => {
-                    // console.log(response.body);
-                },response => {
-                    //error callback
-                });
+        created(){
+
         },
-        mounted:function(){
+        mounted(){
             let that = this;
             that.input = document.querySelector('.bar-header>input');
             that.input.focus();
@@ -69,44 +79,46 @@
 
         },
         methods:{
-            goBack:function(){
+            goBack(){
                 this.$router.go(-1);
             },
-            search:function(){
+            search(){
                 let that = this;
                 if(that.input !== null){
                     that.input.blur();
                 }
                 that.showRec = false;
                 if(that.key !== ''){
-                    that.$api.searchSongs(that.key)
-                        .then(response => {
-                            // console.log(response.body);
-                            that.result = response.body.data.song.list;
-                        }, response => {
-                            // error callback
+                    that.$api.neteaseSearch(that.key)
+                        .then(res => {
+                            console.log(res);
+                            if(res.data.code === 200){
+                                let list = res.data.result.songs;
+                                let result = [];
+                                list.forEach(music => {
+                                    result.push({
+                                        id:music.id,
+                                        mvid:music.mvid,
+                                        name:music.name,
+                                        al:{
+                                            id:music.album.id,
+                                            name:music.album.name,
+                                            picUrl:''
+                                        },
+                                        ar:[...music.artists]
+                                    });
+                                });
+                                that.result = result;
+                            }
                         });
                 }
             },
-            playMusic:function(index){
+            playMusic(index){
                 let that = this;
                 let currentMusic = that.result[index];
-                let music = {
-                    author:currentMusic.singer[0].name,
-                    cover:"https://y.gtimg.cn/music/photo_new/T002R500x500M000" + currentMusic.albummid + ".jpg",
-                    current:false,
-                    id:currentMusic.songid,
-                    name:currentMusic.songname,
-                    mid:currentMusic.songmid,
-                    albumname:currentMusic.albumname,
-                    albummid:currentMusic.albummid,
-                    albumid:currentMusic.albumid,
-                    singerid:currentMusic.singer[0].id,
-                    singermid:currentMusic.singer[0].mid
-                };
-                that.$store.commit('addAndPlay',music);
+                that.$store.commit('addAndPlay',currentMusic);
             },
-            playRec:function(song){
+            playRec(song){
                 let that = this;
                 that.showRec = false;
                 that.$api.getSongDetail(song.mid)
@@ -131,16 +143,16 @@
                         // error callback
                     });
             },
-            closeRec:function(){
+            closeRec(){
                 this.showRec = false;
             },
-            getAlbum:function(song){
+            getAlbum(song){
 
             },
-            toAlbum:function(id){
+            toAlbum(id){
                 this.$router.push({name: 'album', params: {id: id}})
             },
-            toSinger:function(id){
+            toSinger(id){
                 this.$router.push({name: 'singer', params: {id: id}})
             },
         },
@@ -278,6 +290,7 @@
         padding: .25rem 0;
         position: relative;
         overflow: hidden;
+        background-color: #fff;
     }
     /*.song-list:after,.list-header:after{
         content: '';

@@ -13,7 +13,7 @@
                 <span class="iconfont icon-next" @click="playNext(true)"></span>
             </div>
             <div class="progress" :style="{ width : progress + '%'}"></div>
-            <audio id="player" :src="music.src" :loop="circleMode === 'single'"></audio>
+            <audio id="player" :src="src" :loop="circleMode === 'single'"></audio>
         </div>
         <!--迷你底部播放器结束-->
 
@@ -163,7 +163,8 @@
                 showActionSheet:false,
                 playerBackground:null,
                 windowRatio:0,
-                rotateClass:''
+                rotateClass:'',
+                src:''
             }
         },
         computed:{
@@ -313,7 +314,7 @@
 
                 img.onload = function(){
                     ctx.clearRect( 0, 0, canvas.width, canvas.height );
-                    ctx.drawImage(img,(500 - ratio * 500)/2,0,ratio * 500,500,0,0,canvas.width,canvas.height);
+                    ctx.drawImage(img,0,0,canvas.width,canvas.height);
                     stackBlur.stackBlurCanvasRGB('player-background',0,0,canvas.width,canvas.height,150);
                 };
             },
@@ -470,26 +471,41 @@
                         that.music = that.musicList[that.index];
                     }
                     that.$nextTick(() => {
-                        that.player.src = `http://music.163.com/song/media/outer/url?id=${that.music.id}.mp3`;
                         that.player.play();
-                        console.log(that.player.src);
                     });
                 }else{
                     that.player.pause();
                 }
             },
-            // music指向列表中的一首歌，指向发生变化时更改audio.src属性，同时获取歌词等
+            // music指向列表中的一首歌，指向发生变化时更改audio.src属性，同时获取歌词封面等
             music(newValue,oldValue){
                 let that = this;
                 if(newValue.id !== oldValue.id){
-                    that.drawBackground();
+                    //获取音乐播放链接，高音质
+                    that.$api.musicUrl(newValue.id)
+                        .then(res => {
+                            if(res.data.code === 200 && res.data.data && res.data.data.length > 0){
+                                that.src = res.data.data[0].url;
+                                that.$nextTick(() => {
+                                    that.player.play();
+                                });
+                            }
+                        });
 
-                    that.$nextTick(() => {
-                        that.player.src = `http://music.163.com/song/media/outer/url?id=${newValue.id}.mp3`;
-                        that.player.play();
-                        console.log(that.player.src);
-                    });
+                    //获取歌词专辑封面
+                    if(!newValue.al.picUrl || newValue.al.picUrl === ''){
+                        that.$api.neteaseAlbum(newValue.al.id)
+                            .then(res => {
+                                if(res.data.code === 200){
+                                    newValue.al.picUrl = res.data.album.picUrl;
+                                    that.drawBackground();
+                                }
+                            });
+                    }else{
+                        that.drawBackground();
+                    }
 
+                    //获取歌词
                     that.lyric = null;
                     that.$api.lyric(newValue.id)
                         .then(res => {
@@ -513,12 +529,10 @@
                                         let second = parseInt(timeStr.split(':')[1]);
 
                                         time = minute * 60 + second + millisecond / 1000;
-                                        if(text !== ''){
-                                            lyric.push({
-                                                time,
-                                                text
-                                            });
-                                        }
+                                        lyric.push({
+                                            time,
+                                            text
+                                        });
                                     });
                                     if(lyric.length === 0){
                                         that.lyric = [{

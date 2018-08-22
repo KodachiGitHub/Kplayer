@@ -3,13 +3,13 @@
         <div class="action-wrap" @click="closeAction"></div>
         <div class="action-list">
             <div class="action-title">歌曲：{{ music.name }}</div>
-            <div class="flex action-item" @click="toSinger(music.singermid)">
+            <div class="flex action-item">
                 <span class="iconfont icon-singer"></span>
-                <span>歌手：{{ music.author }}</span>
+                <span v-for="singer in music.ar" @click="toSinger(singer.id)">歌手：{{ singer.name }} </span>
             </div>
-            <div class="flex action-item" @click="toAlbum(music.albumid)">
+            <div class="flex action-item" @click="toAlbum(music.al.id)">
                 <span class="iconfont icon-album"></span>
-                <span class="album-name">专辑：{{ music.albumname }}</span>
+                <span class="album-name">专辑：{{ music.al.name }}</span>
             </div>
         </div>
     </div>
