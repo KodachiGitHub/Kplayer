@@ -2,7 +2,7 @@
     <div id="music-player">
         <!--迷你底部播放器-->
         <div class="flex player-bottom">
-            <div class="cover" @click="fullScreen"><img :src="music.al.picUrl" alt=""></div>
+            <div class="cover" @click="fullScreen"><img :src="music.al.picUrl.replace('http://','https://')" alt=""></div>
             <div class="flex-1 info" @click="fullScreen">
                 <p class="music-name">{{ music.name }}</p>
                 <p class="author"><span v-for="singer in music.ar">{{ singer.name }} </span></p>
@@ -137,7 +137,7 @@
                     name:'music player',
                     ar:[],
                     al:{
-                        picUrl:'http://onpnulig2.bkt.clouddn.com/cover.jpg?imageView2/0/w/500',
+                        picUrl:'https://onpnulig2.bkt.clouddn.com/cover.jpg?imageView2/0/w/500',
                     },
                     src:'',
                     current:false,

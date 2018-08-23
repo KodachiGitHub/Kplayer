@@ -15,7 +15,7 @@
             <div class="label">热门歌单</div>
             <div class="row hot-diss" v-if="hotPlaylist && hotPlaylist.length > 0">
                 <div class="col-33" v-for="item in hotPlaylist" @click="showList(item.id)">
-                    <div class="img-box"><img :src="item.coverImgUrl" alt=""></div>
+                    <div class="img-box"><img :src="item.coverImgUrl.replace('http://','https://')" alt=""></div>
                     <p :title="item.name" class="diss-name">{{ item.name }}</p>
                 </div>
             </div>
@@ -103,7 +103,7 @@
         width: 100%;
         height: 0;
         padding-bottom: 100%;
-        background: #cccccc url('http://o81tu7lli.bkt.clouddn.com/defaultCover.jpg') center center /contain no-repeat;
+        background: #cccccc url('https://o81tu7lli.bkt.clouddn.com/defaultCover.jpg') center center /contain no-repeat;
         display: block;
     }
     .img-box img{

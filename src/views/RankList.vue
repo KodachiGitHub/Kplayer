@@ -234,7 +234,7 @@
     .albumPic{
         width: 6rem;
         height: 6rem;
-        background: #cccccc url('http://o81tu7lli.bkt.clouddn.com/defaultCover.jpg') center center /contain no-repeat;
+        background: #cccccc url('https://o81tu7lli.bkt.clouddn.com/defaultCover.jpg') center center /contain no-repeat;
     }
     .albumPic img{
         width: 100%;
