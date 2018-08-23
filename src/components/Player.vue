@@ -365,6 +365,7 @@
                 that.player.currentTime = 0;
                 that.progress = 0;
                 that.rotateAngle = 0;
+                that.$store.commit('changePlayState',false);
 
                 that.$nextTick(function(){
                     if(that.listLength > 0){
@@ -485,6 +486,7 @@
                                 that.src = res.data.data[0].url;
                                 that.$nextTick(() => {
                                     that.player.play();
+                                    that.$store.commit('changePlayState',true);
                                 });
                             }
                         });
