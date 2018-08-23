@@ -1,6 +1,6 @@
 <template>
     <div id="SongList">
-        <div style="height: 100%;">
+        <!--<div style="height: 100%;">
             <div class="flex bar-header" :class="headerClass">
                 <span class="iconfont icon-back" @click="goBack"></span>
                 <div class="flex-1 info">
@@ -30,8 +30,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
+        </div>-->
     </div>
 </template>
 
@@ -50,6 +49,7 @@
             }
         },
         created:function(){
+            return;
             let that = this;
             that.loading = true;
             that.$api.getRankSongs(that.listId)
@@ -63,6 +63,7 @@
                 });
         },
         mounted:function(){
+            return;
             let that = this;
             //that.initCanvas();
 

@@ -14,7 +14,7 @@
             <music class="tab-content" ref="tab-content" v-show="currentTab === 'music'"></music>
         </transition>
         <transition name="rank-slide">
-            <rank class="tab-content" ref="tab-content" v-show="currentTab === 'rank'"></rank>
+            <!--<rank class="tab-content" ref="tab-content" v-show="currentTab === 'rank'"></rank>-->
         </transition>
         <player></player>
         <user-panel :panelShow="panelShow" v-show="panelShow" v-on:wrapClick="closePanel"></user-panel>

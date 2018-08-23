@@ -7,7 +7,7 @@
             <ul >
                 <li class="flex rank-item" v-for="item in topList" @click="showRank(item.id)">
                     <div class="rank-media">
-                        <img :src="item.picUrl" alt="">
+                        <img :src="item.picUrl.replace('http://','https://')" alt="">
                         <span class="listen-count">{{item.listenCount | listenCount}}</span>
                     </div>
                     <div class="flex-1 rank-info">

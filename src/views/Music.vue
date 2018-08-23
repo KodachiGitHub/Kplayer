@@ -7,7 +7,7 @@
             <div class="swiper-header">
                 <div class="swiper-wrapper" v-if="banners">
                     <div  v-for="banner in banners" class="swiper-slide">
-                        <img :src="banner.picUrl">
+                        <img :src="banner.picUrl.replace('http://','https://')">
                     </div>
                 </div>
                 <div class="swiper-pagination"></div>
