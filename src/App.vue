@@ -61,7 +61,7 @@
 <style>
     @import 'assets/css/normalize.css';
     @import 'assets/css/common.css';
-    @import url(http://at.alicdn.com/t/font_ocqohyg8c2xu5wmi.css);
+    @import url(https://at.alicdn.com/t/font_ocqohyg8c2xu5wmi.css);
 
     #app {
         font-family: '微软雅黑', Helvetica, Arial, sans-serif;
