@@ -5,7 +5,7 @@
         </transition>
         <transition name="slide" @after-leave="afterLeave">
             <div v-show="slideShow" class="panel-container">
-                <div class="panel-header" :style="{background:'url(http://p1.music.126.net/i0qi6mibX8gq2SaLF1bYbA==/2002210674180198.jpg) center center /cover no-repeat'}"></div>
+                <div class="panel-header" :style="{background:'url(https://p1.music.126.net/i0qi6mibX8gq2SaLF1bYbA==/2002210674180198.jpg) center center /cover no-repeat'}"></div>
             </div>
         </transition>
     </div>

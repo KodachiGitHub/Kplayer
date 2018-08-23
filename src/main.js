@@ -11,8 +11,6 @@ Vue.use(VueResource);
 Vue.prototype.$api = Api;
 Vue.prototype.$t = tools;
 
-Vue.config.devtools = true;
-
 new Vue({
     el: '#app',
     router,

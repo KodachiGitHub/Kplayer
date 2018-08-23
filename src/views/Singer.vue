@@ -36,7 +36,7 @@
                     <transition :name="transitionName">
                         <div v-show="currentTab === 'album'" class="list-content" v-if="albums">
                             <div class="flex song-list" v-for="(album,index) in albums" @click="toAlbum(album.id)">
-                                <div class="album-cover"><img :src="album.picUrl" alt=""></div>
+                                <div class="album-cover"><img :src="album.picUrl.replace('http://','https://')" alt=""></div>
                                 <div class="flex-1 music-info">
                                     <p class="music-name">{{ album.name }}</p>
                                     <p class="music-singer">{{ $t.timeFormat(album.publishTime,'yyyy-MM-dd') }} 歌曲{{album.size}}</p>
@@ -94,7 +94,8 @@
         computed:{
             background(){
                 if(this.singer){
-                    return `background:url("${this.singer.picUrl}") center center /cover no-repeat`;
+                    let url = this.singer.picUrl.replace('http://','https://');
+                    return `background:url("${url}") center center /cover no-repeat`;
                 }
                 return '';
             },

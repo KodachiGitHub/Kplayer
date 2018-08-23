@@ -1,6 +1,6 @@
 <template>
     <div id="SongList">
-        <div style="height: 100%;">
+        <!--<div style="height: 100%;">
             <div class="flex bar-header" :class="headerClass">
                 <span class="iconfont icon-back" @click="goBack"></span>
                 <div class="flex-1 info">
@@ -30,8 +30,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-
+        </div>-->
     </div>
 </template>
 
@@ -50,6 +49,7 @@
             }
         },
         created:function(){
+            return;
             let that = this;
             that.loading = true;
             that.$api.getRankSongs(that.listId)
@@ -63,6 +63,7 @@
                 });
         },
         mounted:function(){
+            return;
             let that = this;
             //that.initCanvas();
 
@@ -120,7 +121,7 @@
 
                 let img = document.createElement('img');
                 img.crossOrigin = '';
-                img.src = that.music.cover;
+                img.src = that.music.cover.replace('http://','https://');
 
                 img.onload = function(){
                     ctx.clearRect( 0, 0, canvas.width, canvas.height );
@@ -233,7 +234,7 @@
     .albumPic{
         width: 6rem;
         height: 6rem;
-        background: #cccccc url('http://o81tu7lli.bkt.clouddn.com/defaultCover.jpg') center center /contain no-repeat;
+        background: #cccccc url('https://o81tu7lli.bkt.clouddn.com/defaultCover.jpg') center center /contain no-repeat;
     }
     .albumPic img{
         width: 100%;

@@ -14,10 +14,10 @@
             <music class="tab-content" ref="tab-content" v-show="currentTab === 'music'"></music>
         </transition>
         <transition name="rank-slide">
-            <rank class="tab-content" ref="tab-content" v-show="currentTab === 'rank'"></rank>
+            <!--<rank class="tab-content" ref="tab-content" v-show="currentTab === 'rank'"></rank>-->
         </transition>
         <player></player>
-        <user-panel :panelShow="panelShow" v-show="panelShow" v-on:wrapClick="closePanel"></user-panel>
+        <!--<user-panel :panelShow="panelShow" v-show="panelShow" v-on:wrapClick="closePanel"></user-panel>-->
         <transition name="page-fade">
             <router-view class="pages"></router-view>
         </transition>
@@ -61,7 +61,7 @@
 <style>
     @import 'assets/css/normalize.css';
     @import 'assets/css/common.css';
-    @import url(http://at.alicdn.com/t/font_ocqohyg8c2xu5wmi.css);
+    @import url(https://at.alicdn.com/t/font_ocqohyg8c2xu5wmi.css);
 
     #app {
         font-family: '微软雅黑', Helvetica, Arial, sans-serif;

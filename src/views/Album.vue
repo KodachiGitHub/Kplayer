@@ -10,7 +10,7 @@
             </div>
             <div class="container" v-if="album !== null">
                 <div class="flex list-info" style="transition: background 1s">
-                    <img :src="album.picUrl" alt="" class="albumPic">
+                    <img :src="album.picUrl.replace('http://','https://')" alt="" class="albumPic">
                     <div>
                         <p class="album-name">{{ album.name }}</p>
                         <p>发行时间：{{ $t.timeFormat(album.publishTime,'yyyy-MM-dd') }}</p>

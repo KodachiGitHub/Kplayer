@@ -2,7 +2,7 @@
     <div id="music-player">
         <!--迷你底部播放器-->
         <div class="flex player-bottom">
-            <div class="cover" @click="fullScreen"><img :src="music.al.picUrl" alt=""></div>
+            <div class="cover" @click="fullScreen"><img :src="music.al.picUrl.replace('http://','https://')" alt=""></div>
             <div class="flex-1 info" @click="fullScreen">
                 <p class="music-name">{{ music.name }}</p>
                 <p class="author"><span v-for="singer in music.ar">{{ singer.name }} </span></p>
@@ -13,7 +13,7 @@
                 <span class="iconfont icon-next" @click="playNext(true)"></span>
             </div>
             <div class="progress" :style="{ width : progress + '%'}"></div>
-            <audio id="player" :src="src" :loop="circleMode === 'single'"></audio>
+            <audio id="player" :src="src.replace('http://','https://')" :loop="circleMode === 'single'"></audio>
         </div>
         <!--迷你底部播放器结束-->
 
@@ -31,7 +31,7 @@
                         <span v-if="music.id !== -1" class="iconfont icon-operation" @click="openActionSheet"></span>
                     </div>
                     <div class="cover-big rotate" :class="{ 'animate-paused': !playing }" v-if="!showLyric">
-                        <img :src="music.al.picUrl" alt="" class="">
+                        <img :src="music.al.picUrl.replace('http://','https://')" alt="" class="">
                     </div>
                 </div>
                 <div class="control-box">
@@ -137,7 +137,7 @@
                     name:'music player',
                     ar:[],
                     al:{
-                        picUrl:'http://onpnulig2.bkt.clouddn.com/cover.jpg?imageView2/0/w/500',
+                        picUrl:'https://onpnulig2.bkt.clouddn.com/cover.jpg?imageView2/0/w/500',
                     },
                     src:'',
                     current:false,
@@ -310,7 +310,7 @@
 
                 let img = document.createElement('img');
                 img.crossOrigin = '';
-                img.src = that.music.al.picUrl;
+                img.src = that.music.al.picUrl.replace('http://','https://');
 
                 img.onload = function(){
                     ctx.clearRect( 0, 0, canvas.width, canvas.height );
@@ -379,8 +379,6 @@
                             that.music = that.musicList[that.index];
                         }
                     }
-
-                    that.$store.commit('changePlayState',true);
                 });
             },
             //上一首
@@ -488,6 +486,7 @@
                                 that.src = res.data.data[0].url;
                                 that.$nextTick(() => {
                                     that.player.play();
+                                    that.$store.commit('changePlayState',true);
                                 });
                             }
                         });
@@ -529,10 +528,12 @@
                                         let second = parseInt(timeStr.split(':')[1]);
 
                                         time = minute * 60 + second + millisecond / 1000;
-                                        lyric.push({
-                                            time,
-                                            text
-                                        });
+                                        if(!isNaN(time)){
+                                            lyric.push({
+                                                time,
+                                                text
+                                            });
+                                        }
                                     });
                                     if(lyric.length === 0){
                                         that.lyric = [{
