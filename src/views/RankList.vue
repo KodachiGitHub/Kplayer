@@ -121,7 +121,7 @@
 
                 let img = document.createElement('img');
                 img.crossOrigin = '';
-                img.src = that.music.cover;
+                img.src = that.music.cover.replace('http://','https://');
 
                 img.onload = function(){
                     ctx.clearRect( 0, 0, canvas.width, canvas.height );

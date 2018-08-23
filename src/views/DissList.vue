@@ -10,7 +10,7 @@
         </div>
         <div class="container" v-if="playlist">
             <div class="list-info"  :style="{ backgroundColor:color }" style="transition: background 1s">
-                <img :src="playlist.coverImgUrl" alt="" class="albumPic">
+                <img :src="playlist.coverImgUrl.replace('http://','https://')" alt="" class="albumPic">
                 <p class="short-text">{{ playlist.description }}</p>
             </div>
             <div class="loading-box" v-if="loading">

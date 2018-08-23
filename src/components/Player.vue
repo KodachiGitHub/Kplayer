@@ -13,7 +13,7 @@
                 <span class="iconfont icon-next" @click="playNext(true)"></span>
             </div>
             <div class="progress" :style="{ width : progress + '%'}"></div>
-            <audio id="player" :src="src" :loop="circleMode === 'single'"></audio>
+            <audio id="player" :src="src.replace('http://','https://')" :loop="circleMode === 'single'"></audio>
         </div>
         <!--迷你底部播放器结束-->
 
@@ -31,7 +31,7 @@
                         <span v-if="music.id !== -1" class="iconfont icon-operation" @click="openActionSheet"></span>
                     </div>
                     <div class="cover-big rotate" :class="{ 'animate-paused': !playing }" v-if="!showLyric">
-                        <img :src="music.al.picUrl" alt="" class="">
+                        <img :src="music.al.picUrl.replace('http://','https://')" alt="" class="">
                     </div>
                 </div>
                 <div class="control-box">
@@ -310,7 +310,7 @@
 
                 let img = document.createElement('img');
                 img.crossOrigin = '';
-                img.src = that.music.al.picUrl;
+                img.src = that.music.al.picUrl.replace('http://','https://');
 
                 img.onload = function(){
                     ctx.clearRect( 0, 0, canvas.width, canvas.height );
