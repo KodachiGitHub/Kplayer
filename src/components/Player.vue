@@ -515,6 +515,12 @@
                                         time:0,
                                         text:'纯音乐，请欣赏'
                                     }];
+                                }else if(res.data.uncollected){
+                                    //未收录
+                                    that.lyric = [{
+                                        time:0,
+                                        text:'暂未收录歌词！'
+                                    }];
                                 }else{
                                     let lyricArr = res.data.lrc.lyric.split('\n');
                                     let lyric = [];

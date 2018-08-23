@@ -4,8 +4,13 @@
         <div class="action-list">
             <div class="action-title">歌曲：{{ music.name }}</div>
             <div class="flex action-item">
-                <span class="iconfont icon-singer"></span>
-                <span v-for="singer in music.ar" @click="toSinger(singer.id)">歌手：{{ singer.name }} </span>
+                <div class="item-title">
+                    <span class="iconfont icon-singer"></span>
+                    <span>歌手：</span>
+                </div>
+                <div class="singer-box">
+                    <span v-for="singer in music.ar" @click="toSinger(singer.id)">{{ singer.name }} </span>
+                </div>
             </div>
             <div class="flex action-item" @click="toAlbum(music.al.id)">
                 <span class="iconfont icon-album"></span>
@@ -115,5 +120,16 @@
         overflow: hidden;
         white-space: nowrap;
         flex-wrap: nowrap;
+    }
+
+    .item-title{
+        flex-shrink: 0;
+    }
+    .singer-box{
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .singer-box span{
+        white-space: nowrap;
     }
 </style>
