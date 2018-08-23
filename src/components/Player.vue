@@ -365,7 +365,6 @@
                 that.player.currentTime = 0;
                 that.progress = 0;
                 that.rotateAngle = 0;
-                that.$store.commit('changePlayState',false);
 
                 that.$nextTick(function(){
                     if(that.listLength > 0){
@@ -379,8 +378,6 @@
                             that.music = that.musicList[that.index];
                         }
                     }
-
-                    that.$store.commit('changePlayState',true);
                 });
             },
             //上一首
