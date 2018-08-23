@@ -528,10 +528,12 @@
                                         let second = parseInt(timeStr.split(':')[1]);
 
                                         time = minute * 60 + second + millisecond / 1000;
-                                        lyric.push({
-                                            time,
-                                            text
-                                        });
+                                        if(!isNaN(time)){
+                                            lyric.push({
+                                                time,
+                                                text
+                                            });
+                                        }
                                     });
                                     if(lyric.length === 0){
                                         that.lyric = [{
