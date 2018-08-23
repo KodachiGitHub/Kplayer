@@ -17,7 +17,7 @@
             <!--<rank class="tab-content" ref="tab-content" v-show="currentTab === 'rank'"></rank>-->
         </transition>
         <player></player>
-        <user-panel :panelShow="panelShow" v-show="panelShow" v-on:wrapClick="closePanel"></user-panel>
+        <!--<user-panel :panelShow="panelShow" v-show="panelShow" v-on:wrapClick="closePanel"></user-panel>-->
         <transition name="page-fade">
             <router-view class="pages"></router-view>
         </transition>
