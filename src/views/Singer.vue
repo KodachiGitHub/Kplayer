@@ -270,6 +270,40 @@
     .right-leave-active{
         animation:slide-left-out .3s
     }
+
+    @keyframes slide-left-in {
+        from {
+            transform:translate(100%,0)
+        }
+        to{
+            transform:translate(0,0)
+        }
+    }
+    @keyframes slide-left-out {
+        from {
+            transform:translate(0,0)
+        }
+        to{
+            transform:translate(100%,0)
+        }
+    }
+    @keyframes slide-right-in {
+        from {
+            transform:translate(-100%,0)
+        }
+        to{
+            transform:translate(0,0)
+        }
+    }
+    @keyframes slide-right-out {
+        from {
+            transform:translate(0,0)
+        }
+        to{
+            transform:translate(-100%,0)
+        }
+    }
+
     .tabs{
         width: 100%;
         position: relative;
