@@ -16,6 +16,23 @@ npm run dev
 npm run build
 ```
 
+##项目用到的api服务器
+
+项目目前主要使用网易云音乐的api，服务器代码来自于 https://github.com/Binaryify/NeteaseCloudMusicApi。
+
+启用流程：
+
+``` bash
+git clone git@github.com:Binaryify/NeteaseCloudMusicApi.git
+
+cd NeteaseCloudMusicApi
+
+npm install
+
+node app.js
+```
+
+
 ## 部分更新计划
 
 1.添加代理服务器。因为现在有部分接口必须通过代理转接才能正常访问，所以计划将代理的代码整理出来一并放上去

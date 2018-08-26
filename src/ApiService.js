@@ -14,7 +14,7 @@ function apiFactory(api) {
     )
 }
 
-const neteaseBaseUrl = 'https://kodachi.cn';
+const neteaseBaseUrl = 'http://localhost:3000';
 
 export default {
     //网易云音乐banner轮播图
