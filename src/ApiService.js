@@ -57,6 +57,13 @@ export default {
     album(id){
         return axios.get(neteaseBaseUrl + `/album?id=${id}`)
     },
+    //网易云，手机登陆
+    login(phone,password){
+        return axios.get(neteaseBaseUrl + `/login/cellphone?phone=${phone}&password=${password}`)
+    },
+    userPlayList(uid){
+        return axios.get(neteaseBaseUrl + `/user/playlist?uid=${uid}`)
+    },
     getSongDetail(mid){
         return apiFactory(API.song_detail)(mid)
     },

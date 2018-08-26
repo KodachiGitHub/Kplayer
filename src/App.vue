@@ -5,7 +5,7 @@
             <div class="flex-1 flex tabs">
                 <div class="flex-1"></div>
                 <span class="iconfont icon-music" :class="{ 'tab-current': currentTab === 'music'}" @click="changeTab('music')"></span>
-                <span class="iconfont icon-rank" :class="{ 'tab-current': currentTab === 'rank'}"  @click="changeTab('rank')"></span>
+                <span class="iconfont icon-rank" :class="{ 'tab-current': currentTab === 'userList'}"  @click="changeTab('userList')"></span>
                 <div class="flex-1"></div>
             </div>
             <router-link :to="{ name: 'search'}" class="iconfont icon-search"></router-link>
@@ -14,6 +14,7 @@
             <music class="tab-content" ref="tab-content" v-show="currentTab === 'music'"></music>
         </transition>
         <transition name="rank-slide">
+            <user-list class="tab-content" ref="tab-content" v-show="currentTab === 'userList'"></user-list>
             <!--<rank class="tab-content" ref="tab-content" v-show="currentTab === 'rank'"></rank>-->
         </transition>
         <player></player>
@@ -29,6 +30,7 @@
     import UserPanel from './components/UserPanel.vue'
     import Music from './views/Music.vue'
     import Rank from './views/Rank.vue'
+    import UserList from './views/UserList.vue'
 
     export default {
         components:{
@@ -36,6 +38,7 @@
             UserPanel,
             Music,
             Rank,
+            UserList
         },
         data () {
             return {

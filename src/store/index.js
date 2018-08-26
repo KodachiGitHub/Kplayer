@@ -18,12 +18,13 @@ function filter(arr,item,key){
 
 export default new Vuex.Store({
     state:{
-        musicList:[],
-        playing:false,
-        action:'',
-        index:-1,
-        loginInfo:null,
-        pageRouter:'forward'
+        musicList: [],
+        playing: false,
+        action: '',
+        index: -1,
+        loginInfo: null,
+        pageRouter: 'forward',
+        userInfo: JSON.parse(window.localStorage.getItem('userInfo')) || null
     },
     getters: {
         //newMusicList: state => {
@@ -38,6 +39,10 @@ export default new Vuex.Store({
         //},
     },
     mutations:{
+        login(state,userInfo){
+            state.userInfo = userInfo;
+            window.localStorage.setItem('userInfo',JSON.stringify(userInfo));
+        },
         pageNav(state,pageRouter){
             state.pageRouter = pageRouter;
         },
