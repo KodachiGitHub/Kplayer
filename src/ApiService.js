@@ -35,7 +35,7 @@ export default {
     },
     //网易云，音乐url
     musicUrl(id){
-        return axios.get(neteaseBaseUrl + `/music/url?id=${id}`)
+        return axios.get(neteaseBaseUrl + `/music/url?id=${id}&br=320000`)
     },
     //网易云，搜索接口
     neteaseSearch(key){
